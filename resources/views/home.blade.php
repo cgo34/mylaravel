@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <layout></layout>
+<div class="container-fluid">
+    <div class="row mt-2 justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard</div>
 
@@ -17,7 +18,14 @@
                     You are logged in!
                 </div>
             </div>
+            <lot></lot>
         </div>
     </div>
 </div>
 @endsection
+<script>
+    import Lot from "./js/components/Lot";
+    export default {
+        components: {Lot}
+    }
+</script>

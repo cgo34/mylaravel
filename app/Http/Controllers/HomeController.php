@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Programme;
+use App\Lot;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,14 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('app', 'index');
+    }
+
+    public function app()
+    {
+        $programmes = Programme::all();
+        $lots = Lot::all();
+        return view('welcome', compact('programmes', 'lots'));
     }
 
     /**
@@ -23,6 +32,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $programmes = Programme::all();
+        return view('home', compact('programmes'));
         return view('home');
     }
 }

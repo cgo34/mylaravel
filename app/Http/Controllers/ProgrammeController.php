@@ -3,21 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Programme;
+use App\Lot;
 
 class ProgrammeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('app', 'index', 'listProg', 'show', 'showLots');
+    }
+
     public function app()
     {
-        return view('test.index');
+        $programmes = Programme::all();
+        return view('programmes.index', compact('programmes'));
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $programmes = Programme::with('dispositifs')->get();
+        return view('programmes.index', compact('programmes'));
+        return response()->json($programmes);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listProg(Request $request)
+    {
+        //
+        $programmes = Programme::with('dispositifs')->get();
+        return response()->json($programmes);
     }
 
     /**
@@ -50,6 +74,69 @@ class ProgrammeController extends Controller
     public function show($id)
     {
         //
+        $programme = Programme::find($id);
+        $lots = Lot::where('programme_id', $id);
+        $lots = Lot::with('programmes')->get();
+        $lots = Lot::where('programme_id', '=', $id)->get();
+        return view('programmes.programme', compact('programme', 'lots'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showProgrammes()
+    {
+        //
+        $programmes = Programme::with('dispositifs')->get();
+        return response()->json($programmes);
+        return view('programmes.index', compact('lots'));
+        return view('lots.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showLot($idProgramme, $idLot)
+    {
+        //
+        $programme = Programme::where('programme_id', $idProgramme);
+        $programme = Programme::find($idProgramme);
+        $lot = Lot::where([
+                ['programme_id', '=', $idProgramme],
+                ['id', '=', $idLot],
+            ])->get();
+        $lot = Lot::find($idLot);
+        return view('lots.lot', compact('programme', 'lot'));
+    }
+
+    public function getLotMinPrice($idProgramme)
+    {
+        $lots = Lot::where('programme_id', '=', $idProgramme)->get();
+        $lots->min('prix');
+        return response()->json($lots);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showLots($id)
+    {
+        //
+        $lots = Lot::where('programme_id', $id);
+        $lots = Lot::with('programmes')->get();
+        $lots = Lot::where('programme_id', '=', $id)->get();
+        return response()->json($lots);
+        return view('programmes.index', compact('lots'));
+        return view('lots.index');
     }
 
     /**

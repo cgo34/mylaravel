@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Programme extends Model
 {
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function dispositifs(){
         $pivotTable = 'dispositif_programme';
         return $this->belongsToMany(Dispositif::class, $pivotTable, 'programme_id', 'dispositif_id');

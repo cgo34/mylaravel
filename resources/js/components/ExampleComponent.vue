@@ -1,23 +1,24 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div>
-            </div>
+        <h2>Test Exemple Component</h2>
+        <div v-for="programme in programmes">
+            <h4>{{ programme.name }}</h4>
         </div>
     </div>
 </template>
-
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        resource: null,
+        data () {
+            return {
+                programmes: {}
+            }
+        },
+        mounted () {
+            this.resource = this.$resource('/programmes{/id}')
+            this.resource.get().then((response) => {
+                this.programmes = response.body
+            })
         }
     }
 </script>

@@ -27,4 +27,9 @@ class User extends \TCG\Voyager\Models\User
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function programmes()
+    {
+        return $this->hasMany(Programme::class);
+    }
 }

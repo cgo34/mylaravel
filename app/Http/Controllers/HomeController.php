@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Programme;
 use App\Lot;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailContact;
 
 class HomeController extends Controller
 {
@@ -15,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('app', 'index');
+        $this->middleware(['auth'])->except('app', 'contactmail');
     }
 
     public function app()
@@ -35,5 +37,13 @@ class HomeController extends Controller
         $programmes = Programme::all();
         return view('home', compact('programmes'));
         return view('home');
+    }
+
+    public function contactmail()
+    {
+        $contact = ['nom' => 'Krunal', 'email' => 'test@gmail.com', 'message' => 'test' ];
+        Mail::to('capdevillegeoffroy@gmail.com')->send(new EmailContact($contact));
+
+        return 'Email was sent';
     }
 }

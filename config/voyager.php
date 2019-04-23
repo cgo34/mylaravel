@@ -12,8 +12,8 @@ return [
 
     'user' => [
         'add_default_role_on_register' => true,
-        'default_role'                 => 'user',
-        'namespace'                    => null,
+        'default_role'                 => 'particular',
+        'namespace'                    => App\User::class,
         'default_avatar'               => 'users/default.png',
         'redirect'                     => '/admin',
     ],
@@ -43,7 +43,7 @@ return [
     */
 
     'models' => [
-        //'namespace' => 'App\\',
+        'namespace' => 'App\\',
     ],
 
     /*

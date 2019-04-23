@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Programme;
 use App\Lot;
+use App\Dispositif;
 
 class ProgrammeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('app', 'index', 'listProg', 'show', 'showLots');
+        $this->middleware('auth');
     }
 
     public function app()
     {
-        $programmes = Programme::all();
-        return view('programmes.index', compact('programmes'));
+        //$programmes = Programme::all();
+        //return view('programmes.index', compact('programmes'));
+        return view('programmes.index');
     }
 
     /**
@@ -28,8 +31,9 @@ class ProgrammeController extends Controller
     {
         //
         $programmes = Programme::with('dispositifs')->get();
-        return view('programmes.index', compact('programmes'));
-        return response()->json($programmes);
+        $dispositifs = Dispositif::all();
+        return view('programmes.index', compact('programmes', 'dispositifs'));
+        //return response()->json($programmes);
     }
 
     /**
@@ -171,5 +175,31 @@ class ProgrammeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Favorite a particular post
+     *
+     * @param  Post $post
+     * @return Response
+     */
+    public function favoriteProgramme(Programme $programme)
+    {
+        Auth::user()->favorites()->attach($programme->id);
+
+        return back();
+    }
+
+    /**
+     * Unfavorite a particular post
+     *
+     * @param  Post $post
+     * @return Response
+     */
+    public function unFavoriteProgramme(Programme $programme)
+    {
+        Auth::user()->favorites()->detach($programme->id);
+
+        return back();
     }
 }

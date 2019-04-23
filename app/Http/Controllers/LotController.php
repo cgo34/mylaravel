@@ -9,7 +9,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Lot;
+
 
 class LotController extends Controller
 {
@@ -101,5 +103,31 @@ class LotController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Favorite a particular post
+     *
+     * @param  Post $post
+     * @return Response
+     */
+    public function favoriteLot(Lot $lot)
+    {
+        Auth::user()->favoritesLots()->attach($lot->id);
+
+        return back();
+    }
+
+    /**
+     * Unfavorite a particular post
+     *
+     * @param  Post $post
+     * @return Response
+     */
+    public function unFavoriteLot(Lot $lot)
+    {
+        Auth::user()->favoritesLots()->detach($lot->id);
+
+        return back();
     }
 }

@@ -11,13 +11,28 @@
     },
     "devDependencies": {
         "axios": "^0.18",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^4.3.1",
+        "bootstrap-sass": "^3.4.1",
         "cross-env": "^5.1",
-        "jquery": "^3.2",
+        "gulp": "^4.0.0",
+        "jquery": "^3.0",
+        "laravel-elixir": "^6.0.0-11",
+        "laravel-elixir-vue-2": "^0.3.0",
+        "laravel-elixir-webpack-official": "^1.0.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.5",
-        "popper.js": "^1.12",
-        "vue": "^2.5.17",
-        "vue-resource": "^1.0.3"
+        "materialize-css": "^1.0.0",
+        "popper.js": "^1.14.7",
+        "vue": "^2.6.6",
+        "vue-resource": "^1.5.1"
+    },
+    "dependencies": {
+        "laravel-echo": "^1.5.3",
+        "pusher-js": "^4.4.0",
+        "vue-axios": "^2.1.4",
+        "vue-router": "^3.0.2",
+        "vue-tel-input": "^2.0.13",
+        "vue-template-compiler": "^2.6.6",
+        "vuetify": "^1.5.2"
     }
 }

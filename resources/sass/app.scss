@@ -12,7 +12,65 @@
 //Materialize
 //@import "~materialize-css/sass/materialize.scss";
 
+.primary-color{
+  color: $primary;
+}
+
+.primary-plain {
+  background: $primary;
+}
+
+.primary-border{
+  border-color: $primary;
+}
+
+.secondary-color{
+  color: $secondary;
+}
+
+.secondary-plain {
+  background: $secondary;
+}
+
+.secondary-border{
+  border-color: $secondary;
+}
+
+.white-color {
+  color: $white;
+}
+
+
 .navbar-laravel {
-  background-color: #536777;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  background-color: $white  !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  display: block !important;
+  height: 72px !important;
+}
+
+#main-nav li.nav-item,
+#main-nav a.nav-link {
+  list-style: none;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.spacer {
+  height: 5px !important;
+}
+
+#main-nav {
+  z-index: 20 !important;
+}
+
+#lot-toolbar {
+  top: 29px;
+  z-index: 10 !important;
+}
+
+.lot-section {
+  padding-top: 150px;
+  margin-top: -150px;
 }

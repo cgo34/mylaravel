@@ -9,6 +9,7 @@
 namespace App\Widgets;
 
 use App\Programme;
+use App\User;
 use Arrilot\Widgets\AbstractWidget;
 use TCG\Voyager\Facades\Voyager;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,15 @@ class ProgrammeDimmer extends AbstractWidget
 
     public function run()
     {
-        $count = Programme::count();
-        $string = $count == 1 ? 'Programme' : 'Programmes';
 
+
+        if(Auth::user()->id === 1){
+            $count = Programme::count();
+            $string = $count == 1 ? 'Programme' : 'Programmes';
+        }else{
+            $count = Programme::where('author_id', Auth()->user()->id)->count();
+            $string = $count == 1 ? 'Programme' : 'Programmes';
+        }
         return view('voyager::dimmer', array_merge($this->config, [
             'icon'   => 'voyager-group',
             'title'  => "{$count} {$string}",
@@ -33,6 +40,8 @@ class ProgrammeDimmer extends AbstractWidget
             ],
             'image' => voyager_asset('images/widget-backgrounds/03.png'),
         ]));
+
+
     }
 
     /**

@@ -70,13 +70,5 @@
 </template>
 
 <script>
-    export default {
-        name: 'app',
-        data: () => ({
-            drawer: null
-        }),
-        props: {
-            source: String
-        }
-    }
+    export default {}
 </script>

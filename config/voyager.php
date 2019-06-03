@@ -15,7 +15,7 @@ return [
         'default_role'                 => 'particular',
         'namespace'                    => App\User::class,
         'default_avatar'               => 'users/default.png',
-        'redirect'                     => '/admin',
+        'redirect'                     => '/',
     ],
 
     /*
@@ -28,6 +28,7 @@ return [
     */
 
     'controllers' => [
+        //'namespace' => 'App\\Http\\Controllers\\Voyager',
         'namespace' => 'TCG\\Voyager\\Http\\Controllers',
     ],
 
@@ -120,14 +121,14 @@ return [
         /*
          * Select default language
          */
-        'default' => 'en',
+        'default' => 'fr',
 
         /*
          * Select languages that are supported.
          */
         'locales' => [
             'en',
-            //'pt',
+            'fr',
         ],
     ],
 

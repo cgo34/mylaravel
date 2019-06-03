@@ -82,11 +82,17 @@ class NewCall extends Notification
         $programme = Programme::find($this->call->programme_id);
         $lot = Lot::find($this->call->lot_id);
 
-        dd($programme);
-
-        $message = "UN CLIENT SOUHAITE ETRE RAPPELER SUR GALILEO";
+        $message = "___________________________________________________________________________________________________";
         $message .= "\n";
-        $message .= "Prospect : " . $user->civilite . ' - ' . $user->firstname . ' - ' . $user->lastname . ' - ' . $user->email . ' - ' . $user->phone . ' - ' . $user->address . ' - ' . $user->zipcode . ' - ' . $user->city;
+        $message .= "NOUVELLE DEMANDE DE RAPPELLE GALILEO";
+        $message .= "\n";
+        $message .= "Prospect : " . $user->genre . ' ' . $user->firstname . ' ' . $user->lastname;
+        $message .= "\n";
+        $message .= "Email : " . $user->email;
+        $message .= "\n";
+        $message .= "Phone : " . $user->phone;
+        $message .= "\n";
+        $message .= "Address : " . $user->address . ', ' . $user->zipcode . ' ' . $user->city;
         $message .= "\n";
         $message .= "Programme : " . $programme->name . " [ID : " . $programme->id . "]";
         $message .= "\n";
@@ -95,6 +101,7 @@ class NewCall extends Notification
         }
         $message .= "\n";
         $message .= "___________________________________________________________________________________________________";
+        $message .= "\n";
 
         return (new SlackMessage)
             ->content($message);

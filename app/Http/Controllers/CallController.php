@@ -43,30 +43,7 @@ class CallController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::user()){
-            $programmeId = $request->programme['id'];
-            $programmeName = $request->programme['name'];
 
-            $lotId = $request->lot['id'];
-            $lotNumero = $request->lot['number'];
-
-            $user = auth()->user();
-            $call = [
-                'id' => $user->id,
-                'genre' => $user->genre,
-                'prenom' => $user->firstname,
-                'nom' => $user->lastname,
-                'email' => $user->email,
-                'phone' => $user->phone,
-                'address' => $user->address,
-                'zipcode' => $user->zipcode,
-                'city' => $user->city,
-                'programmeid' => $programmeId,
-                'programmename' => $programmeName,
-                'lotid' => $lotId,
-                'lotnumero' => $lotNumero,
-            ];
-        }else{
             $programmeId = $request->programme['id'];
             $programmeName = $request->programme['name'];
 
@@ -74,6 +51,7 @@ class CallController extends Controller
             $lotNumero = $request->lot['number'];
 
             $call = [
+                'id' => $request->client['id'],
                 'genre' => $request->client['genre'],
                 'prenom' => $request->client['firstname'],
                 'nom' => $request->client['lastname'],
@@ -87,7 +65,7 @@ class CallController extends Controller
                 'lotid' => $lotId,
                 'lotnumero' => $lotNumero,
             ];
-        }
+
 
         Mail::to(['capdevillegeoffroy@gmail.com', 'lucien.r@efficience-groupe.com'])->send(new EmailCall($call));
 
@@ -109,7 +87,7 @@ class CallController extends Controller
         $call->save();
 
 
-        $call = Call::create($data);
+        //$call = Call::create($data);
 
         $user = User::find(1);
         $user->setSlackChannel('call');

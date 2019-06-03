@@ -87,7 +87,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(Auth::user()->firstname === 'Admin')
+                                @if(Auth::user()->id === 1)
                                     @foreach($dataTypeContent as $data)
                                         <tr>
                                             @can('delete',app($dataType->model_name))

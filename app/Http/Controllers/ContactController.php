@@ -43,31 +43,8 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::user()){
-            $programmeId = $request->programme['id'];
-            $programmeName = $request->programme['name'];
 
-            $lotId = $request->lot['id'];
-            $lotNumero = $request->lot['number'];
 
-            $user = auth()->user();
-            $contact = [
-                'id' => $user->id,
-                'genre' => $user->genre,
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'email' => $user->email,
-                'phone' => $user->phone,
-                'message' => $request->client['message'],
-                'address' => $user->address,
-                'zipcode' => $user->code_postal,
-                'city' => $user->city,
-                'programme_id' => $programmeId,
-                'programme_name' => $programmeName,
-                'lot_id' => $lotId,
-                'lot_number' => $lotNumero,
-            ];
-        }else{
             $programmeId = $request->programme['id'];
             $programmeName = $request->programme['name'];
 
@@ -75,7 +52,7 @@ class ContactController extends Controller
             $lotNumero = $request->lot['number'];
 
             $contact = [
-                'id' => '',
+                'id' => $request->client['id'],
                 'genre' => $request->client['genre'],
                 'firstname' => $request->client['firstname'],
                 'lastname' => $request->client['lastname'],
@@ -90,8 +67,6 @@ class ContactController extends Controller
                 'lot_id' => $lotId,
                 'lot_number' => $lotNumero,
             ];
-        }
-
 
 
         $data = [
@@ -109,17 +84,19 @@ class ContactController extends Controller
             'lot_id' => $contact['lot_id'],
         ];
 
-        $newcontact = new Contact($data);
-        $newcontact->save();
-
-
-        $newcontact = Contact::create($data);
 
         Mail::to(['capdevillegeoffroy@gmail.com', 'lucien.r@efficience-groupe.com'])->send(new EmailContact($contact));
+        $contact = new Contact($data);
+        $contact->save();
+
+
+        //$newcontact = Contact::create($data);
+
+
 
         $user = User::find(1);
-        $user->setSlackChannel('contact');
-        $user->notify(new ContactNotification($newcontact));
+        $user->setSlackChannel('call');
+        $user->notify(new ContactNotification($contact));
 
         return response()->json([ $request->all()]);
         return 'Email Contact was sent';

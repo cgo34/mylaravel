@@ -81,19 +81,33 @@ class ContactNotification extends Notification implements ShouldQueue
         $user = User::find($this->contact->user_id);
         $programme = Programme::find($this->contact->programme_id);
         $lot = Lot::find($this->contact->lot_id);
+        $msg = $this->contact->message;
 
-        $message = "NOUVELLE DEMANDE D'INFORMATIONS SUR GALILEO";
+        $message = "___________________________________________________________________________________________________";
         $message .= "\n";
-        $message .= "Prospect : " . $user->civilite . ' - ' . $user->firstname . ' - ' . $user->lastname . ' - ' . $user->email . ' - ' . $user->phone . ' - ' . $user->address . ' - ' . $user->zipcode . ' - ' . $user->city;
+        $message .= "NOUVELLE DEMANDE DE CONTACT SUR GALILEO";
         $message .= "\n";
-        $message .= "Programme : " . $programme->name . " [ID : " . $programme->id . "]";
+        $message .= "Prospect : " . $user->genre . ' ' . $user->firstname . ' ' . $user->lastname;
         $message .= "\n";
-        if(!empty($lot)){
-            $message .= "Lot : " . $lot->numero . " [ID : " . $lot->id . "]";
+        $message .= "Email : " . $user->email;
+        $message .= "\n";
+        $message .= "Phone : " . $user->phone;
+        $message .= "\n";
+        $message .= "Address : " . $user->address . ', ' . $user->zipcode . ' ' . $user->city;
+        $message .= "\n";
+        if(!empty($programme)) {
+            $message .= "Programme : " . $programme->name . " [ID : " . $programme->id . "]";
+            $message .= "\n";
         }
+        if(!empty($lot)){
+            $message .= "Lot : " . $lot->number . " [ID : " . $lot->id . "]";
+            $message .= "\n";
+        }
+        $message .= "Message : \n";
+        $message .= $msg;
         $message .= "\n";
         $message .= "___________________________________________________________________________________________________";
-
+        $message .= "\n";
         return (new SlackMessage)
             ->content($message);
 

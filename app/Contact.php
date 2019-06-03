@@ -12,7 +12,7 @@ class Contact extends Model
      * @var array
      */
     protected $fillable = [
-        'civilite', 'prenom', 'nom', 'email', 'telephone', 'adresse', 'code_postal', 'ville', 'user_id', 'programme_id', 'lot_id'
+        'genre', 'firstname', 'lastname', 'email', 'phone', 'address', 'zipcode', 'city', 'message', 'user_id', 'programme_id', 'lot_id'
     ];
 
     public function programme()

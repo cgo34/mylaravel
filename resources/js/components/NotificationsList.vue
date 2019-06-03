@@ -32,7 +32,7 @@
                     </v-list-tile-content>
                     <v-list-tile-action>
                         <!-- v-bind:href="/notifications/ + item.id" -->
-                        <v-btn icon ripple @click.stop="updateNotification(item.id)" >
+                        <v-btn icon ripple @click.stop="updateNotification(id)" >
                             <v-icon color="grey lighten-1">clear</v-icon>
                         </v-btn>
                     </v-list-tile-action>

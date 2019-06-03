@@ -29,6 +29,7 @@ class ProgrammePolicy extends \TCG\Voyager\Policies\BasePolicy
      */
     public function browse(User $user, Programme $programme)
     {
+        return true;
         if($user->id === 1){
             return true;
         }else{

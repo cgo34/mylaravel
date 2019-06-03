@@ -23,6 +23,7 @@
                                         hint="example of persistent helper text"
                                         persistent-hint
                                         required
+                                        v-bind:v-model="user.username"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12>

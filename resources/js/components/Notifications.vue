@@ -104,7 +104,7 @@
                 window.location.href = "/notifications/" + id;
             },
             updateNotification(notification){
-                axios.post('/notifications/', notification, { 'headers': {'X-AUTH-TOKEN': localStorage.token}})
+                axios.put('/notifications/', notification, { 'headers': {'X-AUTH-TOKEN': localStorage.token}})
                     .then((response) => {
                         console.log(response.data);
                     }).catch(error => {

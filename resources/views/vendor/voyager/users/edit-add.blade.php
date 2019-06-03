@@ -16,7 +16,7 @@
 @section('content')
     <div class="page-content container-fluid">
         <form class="form-edit-add" role="form"
-              action="{{ (isset($dataTypeContent->id)) ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->id) : route('voyager.'.$dataType->slug.'.store') }}"
+              action="@if(!is_null($dataTypeContent->getKey())){{ route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) }}@else{{ route('voyager.'.$dataType->slug.'.store') }}@endif"
               method="POST" enctype="multipart/form-data" autocomplete="off">
             <!-- PUT Method if we are editing -->
             @if(isset($dataTypeContent->id))
@@ -43,6 +43,43 @@
                                 <label for="username">{{ __('Username') }}</label>
                                 <input type="text" class="form-control" id="username" name="username" placeholder="{{ __('Username') }}"
                                        value="@if(isset($dataTypeContent->username)){{ $dataTypeContent->username }}@endif">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">{{ __('voyager::generic.email') }}</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('voyager::generic.email') }}"
+                                       value="{{ $dataTypeContent->email ?? '' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">{{ __('voyager::generic.password') }}</label>
+                                @if(isset($dataTypeContent->password))
+                                    <br>
+                                    <small>{{ __('voyager::profile.password_hint') }}</small>
+                                @endif
+                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
+                            </div>
+
+                            <div class="form-group">
+                                @php
+                                    if (isset($dataTypeContent->genre)) {
+                                        $selected_civilite = $dataTypeContent->genre;
+                                    } else {
+                                        $selected_civilite = '';
+                                    }
+
+                                    $civilites = array('mademoiselle', 'madame', 'monsieur');
+
+                                @endphp
+                                <div class="form-group">
+                                    <label for="genre">{{ __('Civilité') }}</label>
+                                    <select class="form-control select2" id="genre" name="genre">
+                                        @foreach ($civilites as $civ)
+                                            <option value="{{ $civ }}"
+                                                {{ ($civ == $selected_civilite ? 'selected' : '') }}>{{ $civ }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -82,21 +119,40 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="email">{{ __('voyager::generic.email') }}</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('voyager::generic.email') }}"
-                                       value="@if(isset($dataTypeContent->email)){{ $dataTypeContent->email }}@endif">
+                                <label for="company">{{ __('Company') }}</label>
+                                <input type="text" class="form-control" id="company" name="company" placeholder="{{ __('Company') }}"
+                                       value="@if(isset($dataTypeContent->company)){{ $dataTypeContent->company }}@endif">
                             </div>
 
                             <div class="form-group">
-                                <label for="password">{{ __('voyager::generic.password') }}</label>
-                                @if(isset($dataTypeContent->password))
-                                    <br>
-                                    <small>{{ __('voyager::profile.password_hint') }}</small>
-                                @endif
-                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
+                                @php
+                                    if (isset($dataTypeContent->holder)) {
+                                        $selected_holder = $dataTypeContent->holder;
+                                    } else {
+                                        $selected_holder = '';
+                                    }
+
+                                    $holders = array('oui', 'non');
+
+                                @endphp
+
+
+
+                                <label for="holder">{{ __('Titulaire') }}</label>
+                                <select class="form-control select2" id="holder" name="holder">
+                                    @foreach ($holders as $holder)
+                                        <option value="{{ $holder }}"
+                                            {{ ($holder == $selected_holder ? 'selected' : '') }}>{{ $holder }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            @can('editRoles', $dataTypeContent)
+                            <div id="cardfield" class="form-group">
+                                <label for="card">{{ __('Card') }}</label>
+                                <input type="text" class="form-control" id="card" name="card" placeholder="{{ __('Card') }}"
+                                       value="@if(isset($dataTypeContent->card)){{ $dataTypeContent->card }}@endif">
+                            </div>
+
                                 <div class="form-group">
                                     <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
                                     @php
@@ -104,18 +160,28 @@
 
                                         $row     = $dataTypeRows->where('field', 'user_belongsto_role_relationship')->first();
                                         $options = $row->details;
+
+                                        $model = app($options->model);
+                                        $query = $model::where($options->key, $dataTypeContent->{$options->column})->get();
                                     @endphp
-                                    @include('voyager::formfields.relationship')
+                                    <select
+                                        class="form-control select2-ajax" name="{{ $options->column }}"
+                                        data-get-items-route="{{route('voyager.' . $dataType->slug.'.relation')}}"
+                                    >
+                                        @php
+
+                                            $model = app($options->model);
+                                            $query = $model::where($options->key, $dataTypeContent->{$options->column})->get();
+                                        @endphp
+
+                                        @if(!$row->required)
+                                            <option value="">{{__('voyager::generic.none')}}</option>
+                                        @endif
+                                        @foreach($query as $relationshipData)
+                                            <option value="{{ $relationshipData->{$options->key} }}" @if($dataTypeContent->{$options->column} == $relationshipData->{$options->key}){{ 'selected="selected"' }}@endif>{{ $relationshipData->{$options->label} }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="additional_roles">{{ __('voyager::profile.roles_additional') }}</label>
-                                    @php
-                                        $row     = $dataTypeRows->where('field', 'user_belongstomany_role_relationship')->first();
-                                        $options = $row->details;
-                                    @endphp
-                                    @include('voyager::formfields.relationship')
-                                </div>
-                            @endcan
                             @php
                                 if (isset($dataTypeContent->locale)) {
                                     $selected_locale = $dataTypeContent->locale;
@@ -129,7 +195,7 @@
                                 <select class="form-control select2" id="locale" name="locale">
                                     @foreach (Voyager::getLocales() as $locale)
                                         <option value="{{ $locale }}"
-                                                {{ ($locale == $selected_locale ? 'selected' : '') }}>{{ $locale }}</option>
+                                            {{ ($locale == $selected_locale ? 'selected' : '') }}>{{ $locale }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -169,6 +235,22 @@
     <script>
         $('document').ready(function () {
             $('.toggleswitch').bootstrapToggle();
+
+            var selectedHolder = $('#holder').val();
+            if(selectedHolder === 'non'){
+                $('#cardfield').hide();
+            }else if(selectedHolder === 'oui'){
+                $('#cardfield').show();
+            }
+
+            $('#holder').on('change', function () {
+                var selectedHolder = $(this).val();
+                if(selectedHolder === 'non'){
+                    $('#cardfield').hide();
+                }else if(selectedHolder === 'oui'){
+                    $('#cardfield').show();
+                }
+            });
         });
     </script>
 @stop

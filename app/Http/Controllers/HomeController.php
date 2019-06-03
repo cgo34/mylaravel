@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
 use App\Programme;
 use App\Lot;
@@ -17,13 +18,14 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth'])->except('app', 'contactmail');
+        $this->middleware(['auth'])->except('index', 'app');
     }
 
     public function app()
     {
-        $programmes = Programme::all();
-        $lots = Lot::all();
+        $programmes = Programme::count();
+        $lots = Lot::count();
+        return view('home', compact('programmes', 'lots'));
         return view('welcome', compact('programmes', 'lots'));
     }
 
@@ -34,16 +36,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $programmes = Programme::all();
-        return view('home', compact('programmes'));
-        return view('home');
-    }
-
-    public function contactmail()
-    {
-        $contact = ['nom' => 'Krunal', 'email' => 'test@gmail.com', 'message' => 'test' ];
-        Mail::to('capdevillegeoffroy@gmail.com')->send(new EmailContact($contact));
-
-        return 'Email was sent';
+        $programmes = Programme::count();
+        $lots = Lot::count();
+        $posts = Post::orderBy('created_at', 'asc')->take(3)->get();
+        return view('home', compact('programmes', 'lots', 'posts'));
     }
 }

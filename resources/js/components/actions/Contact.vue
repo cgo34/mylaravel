@@ -2,49 +2,81 @@
     <!-- contact modal -->
     <v-dialog v-model="contactModal"  v-click-outside="outside" max-width="600px">
         <v-card>
-            <v-toolbar dark color="#65D6B5">
-
-                <v-toolbar-title class="text-uppercase">Contactez-nous</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon dark @click="hide()">
-                    <v-icon>close</v-icon>
+            <v-card-title class="pt-4" style="display:block; text-align: center;">
+                <h2 class="primary-color text-uppercase font-weight-bold">Contactez-nous</h2>
+                <v-btn absolute top right icon dark style="top: 18px;" @click="hide()">
+                    <v-icon color="#000">close</v-icon>
                 </v-btn>
-            </v-toolbar>
+            </v-card-title>
             <v-card-text>
-                <v-container grid-list-md>
+                <v-container v-if="user" grid-list-md>
+                    <v-layout wrap>
+                        <v-flex xs12 sd6 md6>
+                            <v-text-field color="#42DCA3" label="Prénom*" v-model="client.firstname" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sd6 md6>
+                            <v-text-field color="#42DCA3" label="Nom*" v-model="client.lastname" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sd6 md6>
+                            <v-text-field color="#42DCA3" label="Email*" v-model="client.email" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sd6 md6>
+                            <v-text-field color="#42DCA3" label="Téléphone*" v-model="client.phone" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md12>
+                            <v-text-field color="#42DCA3" v-model="client.address" label="Adresse*"  required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md6>
+                            <v-text-field color="#42DCA3" v-model="client.zipcode" label="Code postal*"  required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md6>
+                            <v-text-field color="#42DCA3" v-model="client.city" label="Ville*"  required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                            <v-textarea color="#42DCA3"
+                                    v-model="client.message"
+                                    name="message"
+                                    label="Message"
+                                    value=""
+                            ></v-textarea>
+                        </v-flex>
+
+                    </v-layout>
+                </v-container>
+                <v-container v-else grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12 md12 text-xs-center>
 
-                            <v-radio-group v-model="contact.client.genre" row>
+                            <v-radio-group v-model="client.genre" row>
                                 <v-radio label="Mademoiselle" value="mademoiselle"></v-radio>
                                 <v-radio label="Madame" value="madame"></v-radio>
                                 <v-radio label="Monsieur" value="monsieur"></v-radio>
                             </v-radio-group>
                         </v-flex>
                         <v-flex xs12 sd6 md6>
-                            <v-text-field label="Prénom*" v-model="contact.client.firstname" required></v-text-field>
+                            <v-text-field color="#42DCA3" label="Prénom*" v-model="client.firstname" required></v-text-field>
                         </v-flex>
                         <v-flex xs12 sd6 md6>
-                            <v-text-field label="Nom*" v-model="contact.client.lastname" required></v-text-field>
+                            <v-text-field color="#42DCA3" label="Nom*" v-model="client.lastname" required></v-text-field>
                         </v-flex>
                         <v-flex xs12 sd6 md6>
-                            <v-text-field label="Email*" v-model="contact.client.email" required></v-text-field>
+                            <v-text-field color="#42DCA3" label="Email*" v-model="client.email" required></v-text-field>
                         </v-flex>
                         <v-flex xs12 sd6 md6>
-                            <v-text-field label="Téléphone*" v-model="contact.client.phone" required></v-text-field>
+                            <v-text-field color="#42DCA3" label="Téléphone*" v-model="client.phone" required></v-text-field>
                         </v-flex>
                         <v-flex xs12 md12>
-                            <v-text-field v-model="contact.client.address" label="Adresse*"  required></v-text-field>
+                            <v-text-field color="#42DCA3" v-model="client.address" label="Adresse*"  required></v-text-field>
                         </v-flex>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="contact.client.zipcode" label="Code postal*"  required></v-text-field>
+                            <v-text-field color="#42DCA3" v-model="client.zipcode" label="Code postal*"  required></v-text-field>
                         </v-flex>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="contact.client.city" label="Ville*"  required></v-text-field>
+                            <v-text-field color="#42DCA3" v-model="client.city" label="Ville*"  required></v-text-field>
                         </v-flex>
                         <v-flex xs12>
-                            <v-textarea
-                                    v-model="contact.client.message"
+                            <v-textarea color="#42DCA3"
+                                    v-model="client.message"
                                     name="message"
                                     label="Message"
                                     value=""
@@ -54,12 +86,31 @@
                     </v-layout>
                 </v-container>
                 <small>*indicates required field</small>
-
             </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click="contactClient()">Envoyer</v-btn>
-            </v-card-actions>
+            <v-card-text class="align-center pt-0 pb-0">
+                <v-container class="text-md-center">
+                    <v-btn color="#D81B60" round dark class="btn-box-shadow-secondary"  @click.stop="contactClient()">Envoyer</v-btn>
+                </v-container>
+            </v-card-text>
+            <v-card-text>
+                <p><small>Les données signalées ci-dessus par un astérisque sont nécessaires
+                    pour nous permettre de répondre à votre demande de rappel.
+                    Elles sont collectées et traitées informatiquement par Galileo (société du groupe EFFICIENCE GROUPE)
+                    uniquement sur la base de votre consentement et sont destinées à ses services internes
+                    et à ses sous-traitants techniques, aux seules fins de répondre à votre demande.
+                    Ces informations ne font l’objet d’aucun transfert en dehors du territoire de l’UE.
+                    Vos données sont conservées pendant le seul délai nécessaire à la gestion de votre demande,
+                    et si vous y consentez ci-avant, dans le cadre de nos opérations de prospection commerciale
+                    à concurrence d’un délai de 3 ans au terme duquel elles sont définitivement effacées
+                    sauf en cas de nouvelle demande de votre part. En application de la règlementation applicable
+                    à la protection des données personnelles, vous disposez sur ces données de droits (i)
+                    d’accès, (ii) de rectification, (iii) d’effacement, (iv) de limitation et (v)
+                    de portabilité vers un prestataire tiers le cas échéant. Vous pouvez en outre
+                    vous opposer à tout moment au traitement de vos données.
+                    Vous pourrez faire valoir ces droits en écrivant au DPO à dpo@galileo.immo,
+                    en justifiant de votre identité. En cas de litige, vous disposez également du droit de saisir
+                    la CNIL.</small></p>
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>
@@ -67,30 +118,34 @@
 <script>
     export default {
         name: "Contact",
-        props: ['idProgramme', 'nameProgramme', 'idLot', 'numberLot', 'contactModal'],
+        props: ['idProgramme', 'nameProgramme', 'idLot', 'numberLot', 'contactModal', 'user'],
         data: function () {
             return {
-                contact: {
-                    'client': {
-                        'genre': '', 'firstname': '', 'lastname': '', 'email': '', 'phone': '', 'address': '', 'zipcode': '', 'city': '', 'message': ''
-                    },
-                    'programme': {
-                        'id': this.idProgramme, 'name': this.nameProgramme
-                    },
-                    'lot': {
-                        'id': this.idLot, 'number': this.numberLot
-                    },
+                client: {},
+                programme: {
+                    'id': this.idProgramme, 'name': this.nameProgramme,
                 },
+                lot: {
+                    'id': this.idLot, 'number': this.numberLot,
+                },
+            }
+        },
+        mounted() {
+            if(typeof this.user === 'string'){
+                this.client = JSON.parse(this.user);
+            }else{
+                this.client = this.user;
             }
         },
         methods: {
             show(){},
             hide(){
-                this.$emit('update:contactModal', false)
+                this.$emit('update:contactModal', false);
             },
             contactClient() {
                 var _this = this;
-                axios.post('/action/contact', _this.contact ).then((response) => {
+                var calling = {client : _this.client, programme : _this.programme, lot : _this.lot};
+                axios.post('/action/contact', calling ).then((response) => {
                     this.contact = {}; //Clear input fields.
                     this.$emit('update:contactModal', false);
                     flash('Votre demande de contact à bien été prise en compte.', 'success');
@@ -100,6 +155,7 @@
             },
             outside: function(e) {
                 this.$emit('update:contactModal', false);
+
             },
         },
         directives: {

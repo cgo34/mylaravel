@@ -37,7 +37,7 @@ class NewDenonce extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database', 'slack'];
+        return ['database', 'slack', 'broadcast'];
     }
 
     /**
@@ -77,11 +77,27 @@ class NewDenonce extends Notification implements ShouldQueue
         $programme = Programme::find($this->denonce->programme_id);
         $lot = Lot::find($this->denonce->lot_id);
 
-        $message = "NOUVELLE DENONCE SUR GALILEO";
+        $message = "___________________________________________________________________________________________________";
         $message .= "\n";
-        $message .= "Prospect : " . $this->denonce->firstname . ' - ' . $this->denonce->lastname . ' - ' . $this->denonce->email . ' - ' . $this->denonce->phone . ' - ' . $this->denonce->address . ' - ' . $this->denonce->zipcode . ' - ' . $this->denonce->city;
+        $message .= "NOUVELLE DENONCE SUR GALILEO";
         $message .= "\n";
-        $message .= "Professionnel : " . $user->firstname . ' - ' . $user->lastname . ' - ' . $user->email . ' - ' . $user->phone . " [ID : " . $user->id . "]";
+        $message .= "Prospect : " . $this->denonce->genre . ' ' . $this->denonce->firstname . ' ' . $this->denonce->lastname;
+        $message .= "\n";
+        $message .= "Email : " . $this->denonce->email;
+        $message .= "\n";
+        $message .= "Phone : " . $this->denonce->phone;
+        $message .= "\n";
+        $message .= "Address : " . $this->denonce->address . ', ' . $this->denonce->zipcode . ' ' . $this->denonce->city;
+        $message .= "\n";
+        $message .= "\n";
+        $message .= "Professionnel : " . $user->genre . ' ' . $user->firstname . ' ' . $user->lastname ;
+        $message .= "\n";
+        $message .= "Email : " . $user->email;
+        $message .= "\n";
+        $message .= "Phone : " . $user->phone;
+        $message .= "\n";
+        $message .= "Address : " . $user->address . ', ' . $user->zipcode . ' ' . $user->city;
+        $message .= "\n";
         $message .= "\n";
         $message .= "Programme : " . $programme->name . " [ID : " . $programme->id . "]";
         $message .= "\n";
@@ -89,7 +105,6 @@ class NewDenonce extends Notification implements ShouldQueue
             $message .= "Lot : " . $lot->numero . " [ID : " . $lot->id . "]";
         }
         $message .= "\n";
-        $message .= "___________________________________________________________________________________________________";
 
         return (new SlackMessage)
             ->content($message);

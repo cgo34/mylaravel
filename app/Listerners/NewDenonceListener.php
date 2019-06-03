@@ -2,7 +2,7 @@
 
 namespace App\Listerners;
 
-use App\Events\NewDenonce;
+use App\Events\NewDenonceEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -21,10 +21,10 @@ class NewDenonceListener
     /**
      * Handle the event.
      *
-     * @param  NewDenonce  $event
+     * @param  NewDenonceEvent  $event
      * @return void
      */
-    public function handle(NewDenonce $event)
+    public function handle(NewDenonceEvent $event)
     {
         //
     }

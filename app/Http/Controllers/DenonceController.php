@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewDenonce;
 use App\Denonce;
 use App\User;
-use App\Mail\Prospect;
+use Pusher\Pusher;
 
 class DenonceController extends Controller
 {
@@ -44,12 +39,7 @@ class DenonceController extends Controller
      */
     public function store(Request $request)
     {
-
-
-
-        if(Auth::user()){
-
-            $user = auth()->user();
+        $user = auth()->user();
             $denonce = [
                 'pro' => [
                     'id' => $user->id,
@@ -77,39 +67,7 @@ class DenonceController extends Controller
                     'lot_number' => $request->lot['number'],
                 ]
             ];
-
-        }else{
-            $user = auth()->user();
-            $denonce = [
-                'pro' => [
-                    'id' => $user->id,
-                    'genre' => $user->genre,
-                    'firstname' => $user->firstname,
-                    'lastname' => $user->lastname,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'address' => $user->address,
-                    'zipcode' => $user->code_postal,
-                    'city' => $user->city,
-                ],
-                'client' => [
-                    'genre' => $request->client['genre'],
-                    'firstname' => $request->client['firstname'],
-                    'lastname' => $request->client['lastname'],
-                    'email' => $request->client['email'],
-                    'phone' => $request->client['phone'],
-                    'address' => $request->client['address'],
-                    'zipcode' => $request->client['zipcode'],
-                    'city' => $request->client['city'],
-                    'programme_id' => $request->programme['id'],
-                    'programme_name' => $request->programme['name'],
-                    'lot_id' => $request->lot['id'],
-                    'lot_number' => $request->lot['number'],
-                ]
-            ];
-        }
-
-
+           // return response()->json($denonce);
         $data = [
             'genre' => $denonce['client']['genre'],
             'firstname_pro' => $denonce['pro']['firstname'],
@@ -133,20 +91,17 @@ class DenonceController extends Controller
         $newdenonce = new Denonce($data);
         $newdenonce->save();
 
-        $newdenonce = Denonce::create($data);
+        //$newdenonce = Denonce::create($data);
 
-        Mail::to(['capdevillegeoffroy@gmail.com', 'lucien.r@efficience-groupe.com'])->send(new Prospect($denonce));
+        //Mail::to(['capdevillegeoffroy@gmail.com', 'lucien.r@efficience-groupe.com'])->send(new Prospect($denonce));
 
         $user = User::find(1);
-        $user->setSlackChannel('denonce');
+        $user->setSlackChannel('denonces');
         $user->notify(new NewDenonce($newdenonce));
 
 
         // Add denonce to denonce list
-        return response()->json([ $request->all()]);
-        return 'Email Denonce was sent';
-
-
+        return response()->json($request->all());
     }
 
     /**

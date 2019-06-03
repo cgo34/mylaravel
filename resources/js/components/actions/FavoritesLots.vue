@@ -1,6 +1,5 @@
 <template>
-    <span>
-    <v-tooltip top v-if="isFavoritedLot" >
+    <v-tooltip bottom v-if="isFavoritedLot" >
         <template v-slot:activator="{ on }" >
             <v-btn flat icon color="pink" v-on="on" @click.prevent="unFavorite(lot)">
                 <v-icon >favorite</v-icon>
@@ -8,7 +7,7 @@
         </template>
         <span>Enlever le lot des favoris</span>
     </v-tooltip>
-    <v-tooltip top v-else >
+    <v-tooltip bottom v-else >
         <template v-slot:activator="{ on }" >
             <v-btn flat icon color="pink" v-on="on" @click.prevent="favorite(lot)">
                 <v-icon >favorite_border</v-icon>
@@ -16,7 +15,6 @@
         </template>
         <span>Mettre le lot en favoris</span>
     </v-tooltip>
-    </span>
 </template>
 
 <script>

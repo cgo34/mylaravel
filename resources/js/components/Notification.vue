@@ -12,6 +12,7 @@
 
                 <v-list-tile-title v-html="type"></v-list-tile-title>
                 <v-list-tile-sub-title v-html="message"></v-list-tile-sub-title>
+                <v-list-tile-sub-title v-html="data"></v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
                 <!-- v-bind:href="/notifications/ + item.id" -->

@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-        $user = $request->user();
         $user = auth()->user();
         return view('notifications.index', compact('user'));
     }
@@ -23,13 +20,12 @@ class NotificationController extends Controller
         $user = auth()->user();
         $notifications = $user->unreadNotifications;
         return response()->json($notifications);
-        return view('notifications.index', compact('user'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  char  $id
+     * @param  integer  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -37,7 +33,7 @@ class NotificationController extends Controller
 
         $user = User::find(1);
         $notification = DB::table('notifications')->where('id', $id)->first();
-
+        //dd($notification);
 
         $notif = [
             'id' => $notification->id,
@@ -56,14 +52,18 @@ class NotificationController extends Controller
         if($request->user()->unreadNotifications->isEmpty()) {
             return redirect()->route('home');
         }else{
-            return redirect()->route('notification.index');
+            return redirect()->route('notifications.index');
         }
-        return back();
     }
 
-    public function markAsReadNotification(DatabaseNotification $notification)
+    public function unread(Request $request, DatabaseNotification $notif)
     {
-        $notification->markAsRead();
-        return back();
+        $notif->markAsUnread();
+        if($request->user()->unreadNotifications->isEmpty()) {
+            return redirect()->route('home');
+        }else{
+            return redirect()->route('notifications.index');
+        }
     }
+
 }

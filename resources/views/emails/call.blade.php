@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <title>Galileo - Demande de rappel</title>
     <meta charset="utf-8">
 </head>
 <body>
@@ -12,8 +13,8 @@
 </ul>
 <ul>
     <li><strong>Civilité</strong> : {{ $call['genre'] }}</li>
-    <li><strong>Prénom</strong> : {{ $call['prenom'] }}</li>
-    <li><strong>Nom</strong> : {{ $call['nom'] }}</li>
+    <li><strong>Prénom</strong> : {{ $call['firstname'] }}</li>
+    <li><strong>Nom</strong> : {{ $call['lastname'] }}</li>
     <li><strong>Téléphone</strong> : {{ $call['phone'] }}</li>
     <li><strong>Adresse</strong> : {{ $call['address'] }}</li>
     <li><strong>Code postal</strong> : {{ $call['zipcode'] }}</li>

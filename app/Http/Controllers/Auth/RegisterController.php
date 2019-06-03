@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 
+
 class RegisterController extends Controller
 {
     /*
@@ -64,17 +65,53 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+   /*     $user = new User();
+        $user->genre = $data['genre'];
+        $user->username = $data['username'];
+        $user->firstname = $data['firstname'];
+        $user->lastname = $data['lastname'];
+        $user->phone = $data['phone'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->role_id = $data['role_id'];
+        $user->address = $data['address'];
+        $user->zipcode = $data['zipcode'];
+        $user->city = $data['city'];
+        $user->company = $data['company'];
+        $user->holder = $data['holder'];
+        $user->card = $data['card'];
+        $user->setLocaleAttribute('fr');
+        $user->save();*/
+
         return User::create([
-            'civilite' => $data['civilite'],
+            'genre' => $data['genre'],
+            'username' => ($data['username'])?$data['username']:NULL,
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
             'phone' => $data['phone'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'locale' => 'fr',
             'role_id' => $data['role_id'],
-            'cabinet' => $data['cabinet'],
-            'titulaire' => $data['titulaire'],
-            'carte' => $data['carte'],
+            'address' => $data['address'],
+            'zipcode' => $data['zipcode'],
+            'city' => $data['city'],
+            'company' => $data['company'],
+            'holder' => $data['holder'],
+            'card' => $data['card'],
         ]);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        //
+    }
+
+
 }

@@ -24,11 +24,9 @@
                     grid-list-lg
             >
                 <v-layout row wrap>
-                    <v-flex xs12 sd12 sm12>
-                        <h1>@lang('Notifications')</h1>
-                    </v-flex>
+
                     <v-flex xs12 sd4 sm4 text-md-center>
-                        <v-card color="blue-grey darken-2" class="white--text">
+                        <v-card color="#71C0FC" class="white--text">
                             <v-card-title primary-title>
                                 <div class="full-width">
                                     <div class="headline"><v-icon x-large dark>call</v-icon></div>
@@ -38,7 +36,7 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs12 sd4 sm4 md4 text-md-center>
-                        <v-card color="blue-grey darken-2" class="white--text">
+                        <v-card class="primary-gradient white--text">
                             <v-card-title primary-title>
                                 <div class="full-width">
                                     <div class="headline"><v-icon x-large dark>person</v-icon></div>
@@ -48,7 +46,7 @@
                         </v-card>
                     </v-flex>
                     <v-flex xs12 sd4 sm4 md4 text-md-center>
-                        <v-card color="blue-grey darken-2" class="white--text">
+                        <v-card color="#42DCA3" class="white--text">
                             <v-card-title primary-title>
                                 <div class="full-width">
                                     <div class="headline"><v-icon x-large dark>location_searching</v-icon></div>
@@ -64,8 +62,45 @@
                     fluid
                     grid-list-lg
             >
+                <v-flex xs12 sd12 sm12>
+                    <h1>@lang('Notifications')</h1>
+                </v-flex>
             @foreach ($user->unreadNotifications as $notification)
                 @switch( $notification->type )
+                        @case('App\Notifications\LotBooked')
+                        @php ($type = 'Lot réservé')
+                        @if($notification->data['lot']['id'] === null)
+                            @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client')
+                        @else
+                            @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a réservé le lot ' . $notification->data['lot']['numero'] )
+                        @endif
+                        <v-list two-line class="pt-0 pb-0  mt-0 mt-0">
+                            <v-list-tile
+                                avatar
+                                @click=""
+
+                            >
+                                <v-list-tile-avatar>
+                                    <img src="/storage/{{ $notification->data['user']['avatar'] }}">
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+
+                                    <v-list-tile-title :v-html="type">{{ $type }}</v-list-tile-title>
+                                    <v-list-tile-sub-title :v-html="message">{{ $msg }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <form action="{{ route('notifications.update',  [$notification->id] ) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <input type="submit" class="btn-box-shadow-primary primary-plain white--text pl-2 pr-2 v-btn v-btn--depressed v-btn--round" value="@lang('Marqué comme lu')">
+                                    </form>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                            <v-divider
+                                class="mt-0 mb-0"
+                            ></v-divider>
+                        </v-list>
+                        @break
                     @case('App\Notifications\NewDenonce')
                     @php ($type = 'Dénonce')
                     @if($notification->data['programme']['name'] === null)
@@ -73,21 +108,32 @@
                     @else
                         @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client pour le programme ' . $notification->data['programme']['name'] )
                     @endif
-                    <notifications
-                            :id="'{{ $notification->id }}'"
-                            :type="'{{ $type }}'"
-                            :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                            :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                            :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                            :email="'{{ $notification->data['user']['email'] }}'"
-                            :phone="'{{ $notification->data['user']['phone'] }}'"
-                            :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                            :city="'{{ $notification->data['user']['city'] }}'"
-                            :name="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                            :message="'{!! addslashes($msg) !!}'"
-                            :lot="'{{ $notification->data['lot']['numero'] }}'"
-                            :inset="'{{ true }}'"
-                    ></notifications>
+                        <v-list two-line class="pt-0 pb-0  mt-0 mt-0">
+                            <v-list-tile
+                                avatar
+                                @click=""
+
+                            >
+                                <v-list-tile-avatar>
+                                    <img src="/storage/{{ $notification->data['user']['avatar'] }}">
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+
+                                    <v-list-tile-title :v-html="type">{{ $type }}</v-list-tile-title>
+                                    <v-list-tile-sub-title :v-html="message">{{ $msg }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <form action="{{ route('notifications.update',  [$notification->id] ) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <input type="submit" class="btn-box-shadow-primary primary-plain white--text pl-2 pr-2 v-btn v-btn--depressed v-btn--round" value="@lang('Marqué comme lu')">
+                                    </form>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                            <v-divider
+                                class="mt-0 mb-0"
+                            ></v-divider>
+                        </v-list>
                     @break
                     @case('App\Notifications\ContactNotification')
                     @php ($type = 'Contact')
@@ -96,21 +142,31 @@
                     @else
                         @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' vous a contacté pour le programme ' . $notification->data['programme']['name'] )
                     @endif
-                    <notifications
-                            :id="'{{ $notification->id }}'"
-                            :type="'{{ $type }}'"
-                            :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                            :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                            :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                            :email="'{{ $notification->data['user']['email'] }}'"
-                            :phone="'{{ $notification->data['user']['phone'] }}'"
-                            :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                            :city="'{{ $notification->data['user']['city'] }}'"
-                            :name="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                            :lot="'{{ $notification->data['lot']['numero'] }}'"
-                            :message="'{!! addslashes($msg) !!}'"
-                            :inset="'{{ true }}'"
-                    ></notifications>
+                        <v-list two-line class="pt-0 pb-0 mt-0 mt-0">
+                            <v-list-tile
+                                avatar
+                                @click=""
+                            >
+                                <v-list-tile-avatar>
+                                    <img src="/storage/{{ $notification->data['user']['avatar'] }}">
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+
+                                    <v-list-tile-title :v-html="type">{{ $type }}</v-list-tile-title>
+                                    <v-list-tile-sub-title :v-html="message">{{ $msg }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <form action="{{ route('notifications.update',  [$notification->id] ) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <input type="submit" class="btn-box-shadow-primary primary-plain white--text pl-2 pr-2 v-btn v-btn--depressed v-btn--round" value="@lang('Marqué comme lu')">
+                                    </form>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                            <v-divider
+                                class="mt-0 mb-0"
+                            ></v-divider>
+                        </v-list>
                     @break
                     @case('App\Notifications\NewCall')
                     @php ($type = 'Call')
@@ -119,7 +175,32 @@
                     @else
                         @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' souhaite être rappelé pour le programme ' . $notification->data['programme']['name'] )
                     @endif
-                    <notifications
+                        <v-list two-line class="pt-0 pb-0 mt-0 mt-0">
+                            <v-list-tile
+                                avatar
+                                @click=""
+                            >
+                                <v-list-tile-avatar>
+                                    <img src="/storage/{{ $notification->data['user']['avatar'] }}">
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+
+                                    <v-list-tile-title :v-html="type">{{ $type }}</v-list-tile-title>
+                                    <v-list-tile-sub-title :v-html="message">{{ $msg }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <form action="{{ route('notifications.update',  [$notification->id] ) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <input type="submit" class="btn-box-shadow-primary primary-plain white--text pl-2 pr-2 v-btn v-btn--depressed v-btn--round" value="@lang('Marqué comme lu')">
+                                    </form>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                            <v-divider
+                                class="mt-0 mb-0"
+                            ></v-divider>
+                        </v-list>
+                    {{--<notifications
                             :id="'{{ $notification->id }}'"
                             :type="'{{ $type }}'"
                             :avatar="'{{ $notification->data['user']['avatar'] }}'"
@@ -134,7 +215,7 @@
                             :lot="'{{ $notification->data['lot']['numero'] }}'"
                             :message="'{!! addslashes($msg) !!}'"
                             :inset="'{{ true }}'"
-                    ></notifications>
+                    ></notifications>--}}
                     @break
                 @endswitch
 

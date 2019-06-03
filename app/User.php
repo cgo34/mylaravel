@@ -2,33 +2,29 @@
 
 namespace App;
 
-use TCG\Voyager\Traits\HasRelationships;
-use TCG\Voyager\Traits\VoyagerUser;
+use TCG\Voyager\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
 class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 {
     use Notifiable;
-    use VoyagerUser;
-    use HasRelationships;
 
     protected $guarded = [];
 
     protected $casts = [
+        'email_verified_at' => 'datetime',
         'settings' => 'array',
     ];
 
-    public $additional_attributes = ['full_name'];
-
     protected $slackChannels = [
-        'default' => 'https://hooks.slack.com/services/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',
-        'denonce' => 'https://hooks.slack.com/services/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',
-        'contact' => 'https://hooks.slack.com/services/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',
-        'call' => 'https://hooks.slack.com/services/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'
+        'contact'   => 'https://hooks.slack.com/services/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',
+        'call'      => 'https://hooks.slack.com/services/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',
+        'denonces'   => 'https://hooks.slack.com/services/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',
+        'default'   => 'https://hooks.slack.com/services/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',
     ];
+
+    public $additional_attributes = ['full_name', 'locale'];
 
     protected $slack_url = null;
 
@@ -38,7 +34,24 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'id', 'civilite', 'firstname', 'lastname', 'full_name', 'email', 'phone', 'password', 'role_id', 'username', 'address', 'zipcode', 'city'
+        'id',
+        'username',
+        'genre',
+        'firstname',
+        'lastname',
+        'full_name',
+        'email',
+        'phone',
+        'password',
+        'address',
+        'zipcode',
+        'city',
+        'company',
+        'holder',
+        'card',
+        'settings',
+        'role_id',
+        'locale',
     ];
 
     /**
@@ -50,28 +63,13 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'password', 'remember_token',
     ];
 
-    public function getAvatarAttribute($value)
-    {
-        if (is_null($value)) {
-            return config('voyager.user.default_avatar', 'users/default.png');
-        }
 
-        return $value;
+    public function roleId(){
+        return $this->belongsTo(Role::class);
     }
 
-    public function setCreatedAtAttribute($value)
-    {
-        $this->attributes['created_at'] = Carbon::parse($value)->format('Y-m-d H:i:s');
-    }
-
-    public function setLocaleAttribute($value)
-    {
-        $this->attributes['settings'] = collect($this->settings)->merge(['locale' => $value]);
-    }
-
-    public function getLocaleAttribute()
-    {
-        return $this->settings['locale'];
+    public function roleIdList(){
+        return Role::where('active', 1)->orderBy('created_at')->get();
     }
 
     public function programmes()
@@ -84,6 +82,10 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         return $this->hasMany(Lot::class);
     }
 
+    public function optionRequests(){
+        return $this->belongsToMany(Lot::class, 'option_requests', 'user_id', 'lot_id')->withPivot('state');
+    }
+
     /**
      * Get all of favorite posts for the user.
      */
@@ -93,11 +95,58 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     }
 
     /**
-     * Get all of favorite posts for the user.
+     * Get all of favorite lots for the user.
      */
     public function favoritesLots()
     {
         return $this->belongsToMany(Lot::class, 'favorite_lots', 'user_id', 'lot_id')->withTimeStamps();
+    }
+
+    public function favorite($lotId)
+    {
+        $this->favoritesLots()->attach($lotId);
+        return $this;
+    }
+
+    public function unfavorite($lotId)
+    {
+        $this->favoritesLots()->detach($lotId);
+        return $this;
+    }
+
+    public function isFavorite($lotId)
+    {
+        return (boolean) $this->favoritesLots()->where('lot_id', $lotId)->first(['id']);
+    }
+
+    /**
+     * Get all of booking lots for the user.
+     */
+    public function books()
+    {
+        return $this->belongsToMany(Programme::class, 'books', 'user_id', 'programme_id')->withTimeStamps();
+    }
+
+    public function booksLots()
+    {
+        return $this->belongsToMany(Lot::class, 'book_lots', 'user_id', 'lot_id')->withTimeStamps();
+    }
+
+    public function book($lotId)
+    {
+        $this->booksLots()->attach($lotId);
+        return $this;
+    }
+
+    public function unbook($lotId)
+    {
+        $this->booksLots()->detach($lotId);
+        return $this;
+    }
+
+    public function isBook($lotId)
+    {
+        return (boolean) $this->booksLots()->where('lot_id', $lotId)->first(['id']);
     }
 
     public function getFullNameAttribute()
@@ -125,11 +174,6 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         return $this;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
     /**
      * @param $url
      * @return $this
@@ -139,5 +183,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 
         return $this;
     }
+
+
 
 }

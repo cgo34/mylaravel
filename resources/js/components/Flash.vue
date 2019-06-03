@@ -26,7 +26,7 @@
 
                 setTimeout(() => {
                     this.hide()
-                },6000)
+                },2000)
             },
             hide() {
                 this.show = false
@@ -37,9 +37,9 @@
 
 <style>
     .spacing {
-        position: absolute;
+        position: fixed;
         left: 80%;
         top: 10px;
-        z-index: 10000;
+        z-index: 1000000000;
     }
 </style>

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Programme;
 use App\Dispositif;
+use Doctrine\DBAL\Query\QueryBuilder;
+use http\QueryString;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use App\Programme;
+use App\Lot;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -27,55 +31,42 @@ class SearchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filter(Request $request,  Programme $programme)
+    public function filter(Request $request, Programme $programmes, Lot $lots, Dispositif $dispo)
     {
-        //
 
-        $search = $request->get('city');
-        $search = $request->input('city');
+        //dd($request);
+        $programmes = Programme::query()
+            ->when($request->city, function ($query, $city) {
+                return $query->where('city', 'like', $city);
+            })
+            ->when($request->price, function ($query, $price) {
+                $priceConstraint = function ($q) use ($price) {
+                    return $q->where('prix', '<=', $price);
+                };
+                return $query->whereHas('lots', $priceConstraint)
+                    ->with(['lots' => $priceConstraint]);
+            })
+            ->when($request->dispositif, function ($query, $dispositif) {
+                $dispositifConstraint = function ($q) use ($dispositif) {
+                    return $q->where('id', "=", $dispositif);
+                };
+                return $query->whereHas('dispositifs', $dispositifConstraint)
+                    ->with(['dispositifs' => $dispositifConstraint]);
+            })->orderBy('id', 'DESC');
 
-        $programmes = $programme->newQuery();
-
-        // Search for a user based on their name.
-        if ($request->has('city')) {
-
-            echo 'city request exist';
-            echo $request->input('city');
-            //$programmes->where('ville', $request->input('city'))->get();
-            $programmes->where('ville', $request->input('city'));
+        if ($request->filled('dispositif')) {
+            $dispositifSearch = Dispositif::findOrFail($request->dispositif);
+            $dispositifSearch = $dispositifSearch->name;
         }else{
-            echo 'city request not exist';
-
+            $dispositifSearch = null;
         }
 
-        // Search for a user based on their company.
-        /*if ($request->has('dispositifs')) {
-            //$programme->with('dispositif', $request->input('dispositifs'));
-            $programme->whereHas('dispositifs', function ($query, $request) {
-                $query->where('dispositif', '=', $request->input('dispositifs'));
-            })->get();
-        }
 
-        // Search for a user based on their city.
-        if ($request->has('price')) {
-            //$programme->where('price', $request->input('price'));
-            $programme->whereHas('lot', function ($query, $request) {
-                $query->where('price', '>', $request->input('price'));
-            })->get();
-        }*/
+        //dd($dispositifSearch);
 
-        // Continue for all of the filters.
-        //$dispositifs = Dispositif::all();
-        //dd($dispositifs);
-        //$programmes = $programmes->where('ville', $request->input('city'));
-        //return response()->json($programmes);
-        // Get the results and return them.
-        return view('search.index', compact('programmes'));
-
-        $prog = Programme::all()->where('ville', $request->input('city'));
-
-        return response()->json($prog);
-        return $programmes->tojson();
-
+        return view('search.index', [
+            'programmes' => $programmes->get(),
+            'dispo' => $dispositifSearch,
+        ]);
     }
 }

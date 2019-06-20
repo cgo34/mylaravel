@@ -2,6 +2,7 @@
 
 namespace App;
 
+use const http\Client\Curl\PROXY_HTTP;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Favorite;
@@ -17,18 +18,19 @@ class Lot extends Model
     }
 
     public function programmes(){
-        //$pivotTable = 'programme_lot';
-        //return $this->belongsTo(Programme::class, $pivotTable, 'programme_id', 'lot_id');
-        return $this->belongsTo('App\Programme', 'programme_id');
+        return $this->belongsTo(Programme::class, 'programme_id');
     }
 
     public function programmesIdList(){
         return Programme::where('author_id', Auth::user()->id)->orderBy('created_at')->get();
     }
 
-    public function optionRequests(){
-        $pivotTable = 'lots_option_request_users';
+    public function optionrequests(){
         return $this->hasMany(OptionRequests::class, 'lot_id', 'id');
+    }
+
+    public function favorites(){
+        return $this->hasMany(FavoriteLot::class, 'lot_id', 'id');
     }
 
     public function bookLots(){

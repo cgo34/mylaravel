@@ -187,13 +187,14 @@ class LotController extends Controller
         return $lot->booked;
     }
 
-    public function makeOptionRequest(Lot $lot)
+    public function makeOptionRequest(Lot $lot, $accompaniment)
     {
 
         $optionRequest = new OptionRequests();
         $optionRequest->state = 'pending';
         $optionRequest->lot_id = $lot->id;
         $optionRequest->user_id = Auth::user()->id;
+        $optionRequest->accompaniment = $accompaniment;
         $optionRequest->save();
 
         $user = User::find(1);
@@ -202,6 +203,7 @@ class LotController extends Controller
         $optionRequests = array();
         $optionRequests['lot'] = $lot;
         $optionRequests['user'] = Auth::user();
+        $optionRequests['accompaniment'] = $accompaniment;
 
         $userDemand = User::find(Auth::user()->id);
         $userDemand->notify(new NotificationOptionRequestsPending($lot, Auth::user()->id));

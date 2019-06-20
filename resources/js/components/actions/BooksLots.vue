@@ -1,5 +1,5 @@
 <template>
-    <div v-if="users.role_id === 2">
+    <!--<div v-if="user.role_id === 2">-->
         <div v-if="state === 'validated'">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }" >
@@ -29,10 +29,16 @@
         <div v-else-if="state === false">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }" >
-                        <v-btn v-if="colorFalse === '#5d5d5d'" flat icon :color="colorFalse" v-on="on" @click.prevent="openParticularOptionRequestsModal">
+                        <v-btn v-if="colorFalse === '#5d5d5d' && user.role_id === 2" flat icon :color="colorFalse" v-on="on" @click.prevent="openParticularOptionRequestsModal">
                             <v-icon >fas fa-cart-plus</v-icon>
                         </v-btn>
-                        <v-btn v-else-if="colorFalse === '#FFC400'" flat icon :color="colorFalse" v-on="on" @click.prevent="makeOptionRequest(lot, colorFalse)">
+                        <v-btn v-else-if="colorFalse === '#FFC400' && user.role_id === 2" flat icon :color="colorFalse" v-on="on" @click.prevent="makeOptionRequest(lot, colorFalse)">
+                            <v-icon >fas fa-cart-plus</v-icon>
+                        </v-btn>
+                        <v-btn v-else-if="colorFalse === '#5d5d5d' && user.role_id === 3" flat icon :color="colorFalse" v-on="on" @click.prevent="openProfessionalOptionRequestsModal">
+                            <v-icon >fas fa-cart-plus</v-icon>
+                        </v-btn>
+                        <v-btn v-else-if="colorFalse === '#FFC400' && user.role_id === 3" flat icon :color="colorFalse" v-on="on" @click.prevent="makeOptionRequest(lot, colorFalse)">
                             <v-icon >fas fa-cart-plus</v-icon>
                         </v-btn>
                     </template>
@@ -54,12 +60,43 @@
                         <v-container grid-list-md text-xs-center>
                             <v-layout row wrap align-center>
                                 <v-flex md5 offset-md1 pa-3>
-                                    <v-btn class="btn-box-shadow-primary mb-3" round color="#42DCA3" depressed dark @click.stop="makeOptionRequest(lot, colorFalse)">Oui</v-btn>
+                                    <v-btn class="btn-box-shadow-primary mb-3" round color="#42DCA3" depressed dark @click.stop="makeOptionRequest(lot, colorFalse, true)">Oui</v-btn>
                                     <p>(Un de nos conseillers prendra contact avec vous pour vous accompagner)</p>
                                 </v-flex>
                                 <v-divider vertical light class="mt-0 mb-0"></v-divider>
                                 <v-flex md5 pa-3>
-                                    <v-btn class="btn-box-shadow-primary mb-3" round flat outline color="#42DCA3" light><span>Non</span></v-btn>
+                                    <v-btn class="btn-box-shadow-primary mb-3" round flat outline color="#42DCA3" light @click.stop="makeOptionRequest(lot, colorFalse, false)"><span>Non</span></v-btn>
+                                    <p>(Vous connaissez le marché et les produits, recevez un <b>Cash Back</b>)</p>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-card-text class="text-md-center">
+                        <p>Vous n'êtes pas sûr de vous ? Regardez en détails nos <a href="#">services d'accompagnement</a></p>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+            <v-dialog
+                v-model="professionalOptionRequestsModal"
+                max-width="800"
+            >
+                <v-card>
+                    <v-card-title class="headline pa-3">
+                        <v-flex md12 class="text-md-center">
+                            Vous avez besoin d'être accompagné ?
+                        </v-flex>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container grid-list-md text-xs-center>
+                            <v-layout row wrap align-center>
+                                <v-flex md5 offset-md1 pa-3>
+                                    <v-btn class="btn-box-shadow-primary mb-3" round color="#42DCA3" depressed dark @click.stop="makeOptionRequest(lot, colorFalse, true)">Oui</v-btn>
+                                    <p>(Un de nos conseillers prendra contact avec vous pour vous accompagner)</p>
+                                </v-flex>
+                                <v-divider vertical light class="mt-0 mb-0"></v-divider>
+                                <v-flex md5 pa-3>
+                                    <v-btn class="btn-box-shadow-primary mb-3" round flat outline color="#42DCA3" light @click.stop="makeOptionRequest(lot, colorFalse, false)"><span>Non</span></v-btn>
                                     <p>(Vous connaissez le marché et les produits, recevez un <b>Cash Back</b>)</p>
                                 </v-flex>
                             </v-layout>
@@ -72,8 +109,8 @@
                 </v-card>
             </v-dialog>
         </div>
-    </div>
-    <div v-else-if="users.role_id === 3">
+    <!--</div>-->
+    <!--<div v-else-if="user.role_id === 3">
         <div v-if="state === 'validated'">
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }" >
@@ -146,7 +183,7 @@
                 </v-card>
             </v-dialog>
         </div>
-    </div>
+    </div>-->
 </template>
 
 <script>
@@ -171,36 +208,8 @@ export default {
             users: {},
         }
     },
-    mounted() {
-        if(typeof this.user === 'string'){
-            this.users = JSON.parse(this.user);
-        }else{
-            this.users = this.user;
-        }
-        if(this.booked === 'true'){
-            this.isBookedLot = true;
-            this.color = '#64D8B6';
-        }else{
-            this.isBookedLot = false;
-            this.color = '#5d5d5d';
-        }
-        if(this.bookbyother === 'true'){
-            this.isBookedByOther = true;
-        }else{
-            this.isBookedByOther = false;
-            this.color = '#5d5d5d';
-        }
-
-    },
-    computed: {
-        isBook() {
-            return this.booked;
-            //this.isFavorited = !!this.favorited;
-            //this.$emit('update:favorited', this.isFavorited);
-        },
-    },
     methods: {
-        makeOptionRequest(lot, color) {
+        makeOptionRequest(lot, color, accompaniment) {
             console.log('makeOptionRequest');
             console.log(color);
             if(color === '#FFC400'){
@@ -215,7 +224,7 @@ export default {
                     }).catch(response => console.log(response.data));
             }else if(color === '#5d5d5d'){
                 console.log('action makeRequest');
-                axios.post('/option/request/'+lot)
+                axios.post('/option/request/' + lot + '/' + accompaniment)
                     .then((response) => {
                         console.log(response);
                         this.particularOptionRequestsModal = false;
@@ -224,13 +233,6 @@ export default {
                         flash('Votre demande d\'option à été envoyée.', 'success');
                     }).catch(response => console.log(response.data));
             }
-            /*axios.post('/option/request/'+lot)
-                .then((response) => {
-                    console.log(response);
-                    this.particularOptionRequestsModal = false;
-                    this.colorFalse = '#FFC400';
-                    flash('Votre demande d\'option à été envoyée.', 'success');
-                }).catch(response => console.log(response.data));*/
         },
         unMakeOptionRequest(lot) {
             console.log('unMakeOptionRequest');

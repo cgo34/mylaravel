@@ -5,53 +5,136 @@
         <v-flex md12 class="page-header">
             <h3>Mes favoris</h3>
         </v-flex>
-        @php( $listeProgramme = array() )
+    </v-container>
+    <v-container fluid grid-list-md class="programmes-list pt-0">
 
-        {{-- Add id programme of lot if not in programme list --}}
-        @foreach ($myFavoritesLots as $myFavoriteLot)
-            @if(!in_array($myFavoriteLot->programme_id, $listeProgramme))
-                @php($listeProgramme[] = $myFavoriteLot->programme_id)
-            @endif
-        @endforeach
+        {{--@forelse($programmes as $programme)
 
-        @foreach($listeProgramme as $programme_id)
-
-            {{-- Define variable --}}
-            @php ($programme = app('App\Programme')->find($programme_id))
+            --}}{{-- Define Variables --}}{{--
             @php ($count = 0)
             @php ($countFavorites = 0)
+            @php ($countMyBooked = 0)
             @php ($countBooked = 0)
-            @php ($minimum = 1000000000)
             @php ($lots = array())
             @php ($favoriteslots = array())
+            @php ($mybookslots = array())
             @php ($bookslots = array())
 
-            {{-- Define Dispositif Programme --}}
-            @foreach($programme->dispositifs as $dispositif)
-                @php ($dispositifs = $dispositif->name)
+            --}}{{-- Define Minimum Price --}}{{--
+            @php ($minimum = 1000000000)
+
+            --}}{{-- Define Array for Count Details --}}{{--
+            @foreach($programme->lots as $lot)
+                @php ($count++)
+                @php ($favoriteslots[$lot->id] = ($lot->favorited()) ? 'true' : 'false' )
+                @php ($mybookslots[$lot->id] = ($lot->myBooked()) ? 'true' : 'false' )
+                @php ($bookslots[$lot->id] = $lot->isBooked())
+                @if($lot->prix < $minimum)
+                    @php ($minimum = $lot->prix)
+                @endif
             @endforeach
 
-            {{-- Define Favorites Lots --}}
-            @foreach ($myFavoritesLots as $myFavoriteLot)
-                {{ $myFavoriteLot }}
-                @if($myFavoriteLot->programme_id == $programme->id)
-                    @php ($count++)
-                    @php ($lots[] = $myFavoriteLot)
-                    @php ($favoriteslots[$myFavoriteLot->id] = ($myFavoriteLot->favorited()) ? 'true' : 'false' )
-                    @php ($bookslots[$myFavoriteLot->id] = ($myFavoriteLot->booked()) ? 'true' : 'false' )
-                    @if($myFavoriteLot->prix < $minimum)
-                        @php ($minimum = $myFavoriteLot->prix)
-                    @endif
+            --}}{{-- Count Favorites Lots --}}{{--
+            @foreach($favoriteslots as $key => $favoritelot)
+                @if($favoritelot === 'true')
+                    @php ($countFavorites++)
+                @endif
+            @endforeach
+
+            --}}{{-- Count My Booked Lots --}}{{--
+            @foreach($mybookslots as $key => $mybooklot)
+                @if($mybooklot === 'true')
+                    @php ($countMyBooked++)
+                @endif
+            @endforeach
+
+            --}}{{-- Count Booked Lots --}}{{--
+            @foreach($bookslots as $key => $booklot)
+                @if($booklot === 'true')
+                    @php ($countBooked++)
+                @endif
+            @endforeach
+
+            --}}{{-- Define Minimum Price --}}{{--
+            @if($minimum === 1000000000)
+                @php($minimum = 'N.C')
+            @endif
+
+            --}}{{-- Count Final Number of Lots --}}{{--
+            @if($count === $countBooked && $countMyBooked > 0)
+                @php($countFinal = $countMyBooked)
+            @elseif($count !== $countBooked)
+                @php($countFinal = $count - $countBooked)
+            @endif
+
+            @if($count === $countBooked && $countMyBooked > 0)
+                <v-card width="100%" hover class="mb-3">
+                    <programmes
+                        :programme="{{ $programme }}"
+                        :minimum="'{{ $minimum }}'"
+                        :countfinal="'{{ $countFinal }}'"
+                        :user="{{ Auth()->user() }}"
+                    ></programmes>
+                </v-card>
+            @elseif($count !== $countBooked)
+                <v-card width="100%" hover class="mb-3">
+                    <programmes
+                        :programme="{{ $programme }}"
+                        :minimum="'{{ $minimum }}'"
+                        :countfinal="'{{ $countFinal }}'"
+                        :user="{{ Auth()->user() }}"
+                    ></programmes>
+                </v-card>
+            @endif
+        @empty
+            <p>Vous n'avez aucun lots en favoris</p>
+        @endforelse--}}
+        @forelse($properties as $property)
+            {{ $property }}
+            {{ $property->delivery }}
+            {{ $property->city }}
+            {{ $property->thumbnail }}
+
+            {{-- Define Variables --}}
+            @php ($count = 0)
+            @php ($countFavorites = 0)
+            @php ($countMyBooked = 0)
+            @php ($countBooked = 0)
+            @php ($countFinal = 0)
+            @php ($lots = array())
+            @php ($favoriteslots = array())
+            @php ($mybookslots = array())
+            @php ($bookslots = array())
+
+            {{-- Define Minimum Price --}}
+            @php ($minimum = 1000000000)
+
+            <property-favorite
+                :property="{{ $property }}"
+            ></property-favorite>
+            {{-- Define Array for Count Details --}}
+            @foreach($property->properties as $lot)
+                @php ($count++)
+                @php ($favoriteslots[$lot->id] = ($lot->favorited()) ? 'true' : 'false' )
+                @php ($mybookslots[$lot->id] = ($lot->myBooked()) ? 'true' : 'false' )
+                @php ($bookslots[$lot->id] = $lot->isBooked())
+                @if($lot->price < $minimum)
+                    @php ($minimum = $lot->price)
                 @endif
             @endforeach
 
             {{-- Count Favorites Lots --}}
-            @foreach($programme->lots as $lot)
-                @foreach($favoriteslots as $key => $favoritelot)
-                    @if($lot->id === $key)
-                        @php ($countFavorites++)
-                    @endif
-                @endforeach
+            @foreach($favoriteslots as $key => $favoritelot)
+                @if($favoritelot === 'true')
+                    @php ($countFavorites++)
+                @endif
+            @endforeach
+
+            {{-- Count My Booked Lots --}}
+            @foreach($mybookslots as $key => $mybooklot)
+                @if($mybooklot === 'true')
+                    @php ($countMyBooked++)
+                @endif
             @endforeach
 
             {{-- Count Booked Lots --}}
@@ -61,43 +144,41 @@
                 @endif
             @endforeach
 
-            {{-- Define Minimum Price Lot --}}
+            {{-- Define Minimum Price --}}
             @if($minimum === 1000000000)
                 @php($minimum = 'N.C')
             @endif
 
-            {{-- Define isFavorite Programme --}}
-            @php ($favorites = ($programme->favorited()) ? 'true' : 'false' )
+            {{-- Count Final Number of Lots --}}
+            @if($count === $countBooked && $countMyBooked > 0)
+                @php($countFinal = $countMyBooked)
+            @elseif($count !== $countBooked)
+                @php($countFinal = $count - $countBooked)
+            @endif
 
-            {{-- Define isBooked Programme --}}
-            @php ($books = ($programme->booked()) ? 'true' : 'false' )
-
-            {{-- Define Page --}}
-            @php ($page = 'myfavorites' )
-
-            <v-card width="100%" hover>
-                <programme
-                    :id="'{{ $programme->id }}'"
-                    :thumbnail="'{{ addslashes($programme->thumbnail) }}'"
-                    :images="'{{ addslashes($programme->images) }}'"
-                    :name="'{!! addslashes($programme->name) !!}'"
-                    :livraison="'{{ $programme->date_livraison }}'"
-                    :city="'{{ $programme->city }}'"
-                    :zipcode="'{{ $programme->zipcode }}'"
-                    :dispositifs="'{{ $dispositifs }}'"
-                    :count="'{{ $count }}'"
-                    :countfavorites="'{{ $countFavorites }}'"
-                    :lots="'{{ json_encode($lots) }}'"
-                    :minimum="'{{ $minimum }}'"
-                    :favoriteslots="'{{ json_encode($favoriteslots) }}'"
-                    :favorites="'{{ $favorites }}'"
-                    :books="'{{ $books }}'"
-                    :bookslots="'{{ json_encode($bookslots) }}'"
-                    :page="'{{ $page }}'"
-                    :user="'{{ Auth()->user() }}'"
-                ></programme>
-            </v-card>
-            <v-spacer></v-spacer>
-        @endforeach
+            @if($count === $countBooked && $countMyBooked > 0)
+                good
+                <v-card width="100%" hover class="mb-3">
+                    <properties
+                        :property="{{ $property }}"
+                        :minimum="'{{ $minimum }}'"
+                        :countfinal="'{{ $countFinal }}'"
+                        :user="{{ Auth()->user() }}"
+                    ></properties>
+                </v-card>
+            @elseif($count !== $countBooked)
+                not good
+                <v-card width="100%" hover class="mb-3">
+                    <properties
+                        :property="{{ $property }}"
+                        :minimum="'{{ $minimum }}'"
+                        :countfinal="'{{ $countFinal }}'"
+                        :user="{{ Auth()->user() }}"
+                    ></properties>
+                </v-card>
+            @endif
+        @empty
+            <p>Aucun programmes disponibles</p>
+        @endforelse
     </v-container>
 @endsection

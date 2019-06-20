@@ -63,6 +63,11 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'password', 'remember_token',
     ];
 
+    public function file()
+    {
+        return $this->hasMany("App\File");
+    }
+
 
     public function roleId(){
         return $this->belongsTo(Role::class);
@@ -71,6 +76,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     public function roleIdList(){
         return Role::where('active', 1)->orderBy('created_at')->get();
     }
+
 
     public function programmes()
     {
@@ -82,6 +88,11 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         return $this->hasMany(Lot::class);
     }
 
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
+
     public function optionRequests(){
         return $this->belongsToMany(Lot::class, 'option_requests', 'user_id', 'lot_id')->withPivot('state');
     }
@@ -91,7 +102,8 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
      */
     public function favorites()
     {
-        return $this->belongsToMany(Programme::class, 'favorites', 'user_id', 'programme_id')->withTimeStamps();
+        return $this->belongsToMany(Property::class, 'favorites', 'user_id', 'property_id');
+        //return $this->belongsToMany(Programme::class, 'favorites', 'user_id', 'programme_id')->withTimeStamps();
     }
 
     /**
@@ -100,6 +112,14 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     public function favoritesLots()
     {
         return $this->belongsToMany(Lot::class, 'favorite_lots', 'user_id', 'lot_id')->withTimeStamps();
+    }
+
+    /**
+     * Get all of favorite lots for the user.
+     */
+    public function favoritesProperties()
+    {
+        return $this->belongsToMany(Property::class, 'favorite_properties', 'user_id', 'property_id');
     }
 
     public function favorite($lotId)

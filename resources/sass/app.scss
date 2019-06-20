@@ -11,7 +11,8 @@
 // old primary green #42DCA3 et #64D8B6
 $primary: #00e094;
 $secondary: #2196F3;
-$tertiary: #6495ed;
+$tertiary: #D81B60;
+$quaternary: #FFCA28;
 
 $indigo: #6574cd;
 $purple: #9561e2;
@@ -75,6 +76,30 @@ body, html{
 
 .secondary-border{
   border-color: $secondary;
+}
+
+.tertiary-color{
+    color: $tertiary;
+}
+
+.tertiary-plain {
+    background: $tertiary;
+}
+
+.tertiary-border{
+    border-color: $tertiary;
+}
+
+.quaternary-color{
+    color: $quaternary;
+}
+
+.quaternary-plain {
+    background: $quaternary;
+}
+
+.quaternary-border{
+    border-color: $quaternary;
 }
 
 .grey-color{
@@ -276,3 +301,24 @@ table.v-table tbody td:first-child, table.v-table tbody td:not(:first-child), ta
     list-style: none;
     padding-left: 0;
 }
+
+.advert-features .v-list__tile__sub-title,
+.advert-features .v-list__tile__title {
+    white-space: inherit;
+}
+
+.advert-location .theme--light.v-text-field--outline>.v-input__control>.v-input__slot {
+    border: 1px solid #c7c7c7 !important;
+}
+
+.advert-location .theme--light.v-text-field--outline>.v-input__control>.v-input__slot:hover {
+    border: 1px solid #D81B60 !important;
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+    -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+    filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.advert-location .theme--light.v-text-field.v-input--is-focused>.v-input__control>.v-input__slot {
+    border: 1px solid #D81B60 !important;
+}
+

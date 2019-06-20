@@ -16,3 +16,5 @@ use Illuminate\Http\Request;
 Route::middleware('auth')->get('/user', function (Request $request) {
     return Auth()->user();
 });
+
+Route::get('/annonces/location', 'PropertyController@getLocations');

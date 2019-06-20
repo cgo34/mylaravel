@@ -44,7 +44,7 @@
 <div id="app">
     <v-app id="app">
         @php( $urlPage = url()->current())
-        @if($urlPage === 'http://127.0.0.1:8000' || $urlPage === 'http://localhost:8000' || $urlPage === 'http://563af608.ngrok.io')
+        @if($urlPage === 'http://127.0.0.1:8000' || $urlPage === 'http://localhost:8000' || $urlPage === 'http://10b2023d.ngrok.io')
             <v-toolbar id="main-nav" light fixed flat color="transparent" class="pt-1 pb-1">
                 <v-toolbar-title>
                     <a class="navbar-brand light-blue--text text-uppercase font-weight-black" href="{{ url('/') }}">
@@ -54,14 +54,11 @@
                 <!-- Left Side Of Navbar -->
 
                 {{--{{ menu('PrimaryMenu') }}--}}
-                <a class="nav-link white--text  font-weight-bold" href="{{ url('/programmes') }}">{{ __('Trouver un bien') }}</a>
 
-                <a class="nav-link white--text  font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Notre concept') }}</a>
-
-                <a class="nav-link white--text  font-weight-bold" href="{{ url('/programmes') }}">{{ __('Dispositifs fiscaux') }}</a>
-
-                <a class="nav-link white--text  font-weight-bold" href="{{ url('/programmes') }}">{{ __('Contact') }}</a>
-
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Acheter') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Vendre') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/location') }}">{{ __('Louer') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Estimer') }}</a>
 
                 <v-spacer></v-spacer>
                 <!-- Authentication Links -->
@@ -113,165 +110,7 @@
 
                         </li>
                         <v-divider class="mt-2 mb-2" vertical></v-divider>
-                        @if(Auth::user()->id === 1)
-                            <li class="nav-item dropdown text-center pt-2 pb-2">
 
-                                @if(count(Auth::user()->unreadNotifications) > 0)
-                                    <v-badge color="#00e094" >
-                                        <template v-slot:badge>
-                                            <span>{{count(Auth::user()->unreadNotifications)}}</span>
-                                        </template>
-                                        <v-icon  color="#fff" flat>far fa-bell fa-2x</v-icon>
-                                    </v-badge>
-                                @else
-                                    <v-badge color="#00e094" >
-                                        <template v-slot:badge>
-                                            <span>{{count(Auth::user()->unreadNotifications)}}</span>
-                                        </template>
-                                        <v-icon color="#fff">far fa-bell fa-2x</v-icon>
-                                    </v-badge>
-                                    @endif
-                                    </v-badge>
-                                    <!--<a class="nav-link grey--text darken-1--text" @click.stop="drawer = !drawer" href="#"><span>Notifications</span></a>-->
-                                    <a id="notifDropdown" class="nav-link white--text text--darken-2 dropdown-toggle pt-0 pb-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Notifications <span class="caret"></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifDropdown">
-                                        <v-list two-line>
-                                            <v-subheader>
-                                                <a href="{{ route('notifications.index') }}">Voir toutes les notifications</a>
-                                            </v-subheader>
-                                            <v-divider class="mt-0 mb-0"></v-divider>
-                                            {{--<li>
-                                                <a href="{{ route('notification.index') }}">Voir toutes les notifications</a>
-                                            </li>--}}
-
-                                            @foreach (Auth::user()->unreadNotifications as $notification)
-                                                @switch( $notification->type )
-                                                    @case('App\Notifications\OptionRequests')
-                                                    @php ($type = 'Demande doption')
-                                                    @if($notification->data['lot']['id'] === null)
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a fait une demande doption')
-                                                    @else
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a fait une demande doption pour le lot ' . addslashes($notification->data['lot']['id']) )
-                                                    @endif
-                                                    <notifications
-                                                        :id="'{{ $notification->id }}'"
-                                                        :type="'{{ $type }}'"
-                                                        :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                        :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                        :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                        :email="'{{ $notification->data['user']['email'] }}'"
-                                                        :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                        :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                        :city="'{{ $notification->data['user']['city'] }}'"
-                                                        :programme="''"
-                                                        :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                        :message="'{{ $msg }}'"
-                                                        :inset="'{{ true }}'"
-                                                    ></notifications>
-                                                    @break
-                                                    @case('App\Notifications\LotBooked')
-                                                    @php ($type = 'Lot réservé')
-                                                    @if($notification->data['lot']['id'] === null)
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client')
-                                                    @else
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a réservé le lot ' . addslashes($notification->data['lot']['id']) )
-                                                    @endif
-                                                    <notifications
-                                                        :id="'{{ $notification->id }}'"
-                                                        :type="'{{ $type }}'"
-                                                        :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                        :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                        :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                        :email="'{{ $notification->data['user']['email'] }}'"
-                                                        :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                        :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                        :city="'{{ $notification->data['user']['city'] }}'"
-                                                        :programme="''"
-                                                        :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                        :message="'{{ $msg }}'"
-                                                        :inset="'{{ true }}'"
-                                                    ></notifications>
-                                                    @break
-                                                    @case('App\Notifications\NewDenonce')
-                                                    @php ($type = 'Dénonce')
-                                                    @if($notification->data['programme']['name'] === null)
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client')
-                                                    @else
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                    @endif
-                                                    <notifications
-                                                        :id="'{{ $notification->id }}'"
-                                                        :type="'{{ $type }}'"
-                                                        :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                        :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                        :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                        :email="'{{ $notification->data['user']['email'] }}'"
-                                                        :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                        :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                        :city="'{{ $notification->data['user']['city'] }}'"
-                                                        :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                        :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                        :message="'{{ $msg }}'"
-                                                        :inset="'{{ true }}'"
-                                                    ></notifications>
-                                                    @break
-                                                    @case('App\Notifications\ContactNotification')
-                                                    @php ($type = 'Contact')
-                                                    @if($notification->data['programme']['name'] === null)
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' vous a contacté')
-                                                    @else
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' vous a contacté pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                    @endif
-                                                    <notifications
-                                                        :id="'{{ $notification->id }}'"
-                                                        :type="'{{ $type }}'"
-                                                        :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                        :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                        :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                        :email="'{{ $notification->data['user']['email'] }}'"
-                                                        :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                        :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                        :city="'{{ $notification->data['user']['city'] }}'"
-                                                        :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                        :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                        :message="'{{ $msg }}'"
-                                                        :inset="'{{ true }}'"
-                                                    ></notifications>
-                                                    @break
-                                                    @case('App\Notifications\NewCall')
-                                                    @php ($type = 'Call')
-                                                    @if($notification->data['programme']['name'] === null)
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' souhaite être rappelé')
-                                                    @else
-                                                        @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' souhaite être rappelé pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                    @endif
-                                                    <notifications
-                                                        :id="'{{ $notification->id }}'"
-                                                        :type="'{{ $type }}'"
-                                                        :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                        :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                        :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                        :email="'{{ $notification->data['user']['email'] }}'"
-                                                        :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                        :address="'{{ $notification->data['user']['address'] }}'"
-                                                        :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                        :city="'{{ $notification->data['user']['city'] }}'"
-                                                        :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                        :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                        :message="'{{ $msg }}'"
-                                                        :inset="'{{ true }}'"
-                                                    ></notifications>
-                                                    @break
-                                                @endswitch
-
-                                            @endforeach
-                                        </v-list>
-
-                                    </div>
-                            </li>
-                        @else
                             <li class="nav-item dropdown text-center pt-2 pb-2">
 
                                 @if(count(Auth::user()->unreadNotifications) > 0)
@@ -474,7 +313,6 @@
 
                                     </div>
                             </li>
-                        @endif
                         <v-divider class="mt-2 mb-2" vertical></v-divider>
                         <li class="nav-item dropdown text-center pt-2 pb-2">
                             <v-icon  color="#fff" flat>far fa-user</i></v-icon>
@@ -496,8 +334,8 @@
                                 </form>
                             </div>
                         </li>
-
                         @endguest
+                        <add-advert-button></add-advert-button>
                     </v-toolbar-items>
             </v-toolbar>
         @else
@@ -510,13 +348,11 @@
                 <!-- Left Side Of Navbar -->
                 {{--{{ menu('PrimaryMenu') }}--}}
 
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/programmes') }}">{{ __('Trouver un bien') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Acheter') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Vendre') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/location') }}">{{ __('Louer') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Estimer') }}</a>
 
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Notre concept') }}</a>
-
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/programmes') }}">{{ __('Dispositifs fiscaux') }}</a>
-
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/programmes') }}">{{ __('Contact') }}</a>
                 <v-spacer></v-spacer>
                 <!-- Authentication Links -->
                 @guest
@@ -567,7 +403,29 @@
 
                         </li>
                         <v-divider class="mt-2 mb-2" vertical></v-divider>
-                        @if(Auth::user()->id === 1)
+                        <li class="nav-item text-center pt-2 pb-2">
+
+                            @if(count(Auth::user()->favoritesProperties) > 0)
+                                <v-badge color="#00e094" >
+                                    <template v-slot:badge>
+                                        <span>{{count(Auth::user()->favoritesProperties)}}</span>
+                                    </template>
+                                    <v-icon flat>far fa-heart</v-icon>
+                                </v-badge>
+                            @else
+                                <v-badge color="#00e094" >
+                                    <template v-slot:badge>
+                                        <span>{{count(Auth::user()->favoritesProperties)}}</span>
+                                    </template>
+                                    <v-icon>far fa-heart</v-icon>
+                                </v-badge>
+                            @endif
+
+                            <a class="nav-link grey--text text--darken-2 font-weight-medium pt-0 pb-0" href="{{ url('favorites') }}"><span>Favoris</span></a>
+
+                        </li>
+                        <v-divider class="mt-2 mb-2" vertical></v-divider>
+
                             <li class="nav-item dropdown text-center pt-2 pb-2">
                                 @if(count(Auth::user()->unreadNotifications) > 0)
                                     <v-badge color="#00e094" >
@@ -745,233 +603,6 @@
                                     </v-list>
                                 </div>
                             </li>
-                        @else
-                            <li class="nav-item dropdown text-center pt-2 pb-2">
-
-                                @if(count(Auth::user()->unreadNotifications) > 0)
-                                    <v-badge color="#00e094" >
-                                        <template v-slot:badge>
-                                            <span>{{count(Auth::user()->unreadNotifications)}}</span>
-                                        </template>
-                                        <v-icon flat>far fa-bell fa-2x</v-icon>
-                                    </v-badge>
-                                @else
-                                    <v-badge color="#00e094" >
-                                        <template v-slot:badge>
-                                            <span>{{count(Auth::user()->unreadNotifications)}}</span>
-                                        </template>
-                                        <v-icon>far fa-bell fa-2x</v-icon>
-                                    </v-badge>
-                                @endif
-                            <!--<a class="nav-link grey--text darken-1--text" @click.stop="drawer = !drawer" href="#"><span>Notifications</span></a>-->
-                                <a id="notifDropdown" class="nav-link grey--text text--darken-2 dropdown-toggle pt-0 pb-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Notifications <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifDropdown">
-                                    <v-list two-line>
-                                        <v-subheader>
-                                            <a href="{{ route('notifications.index') }}">Voir toutes les notifications</a>
-                                        </v-subheader>
-                                        <v-divider class="mt-0 mb-0"></v-divider>
-                                        {{--<li>
-                                            <a href="{{ route('notification.index') }}">Voir toutes les notifications</a>
-                                        </li>--}}
-
-                                        @foreach (Auth::user()->unreadNotifications as $notification)
-                                            @switch( $notification->type )
-                                                @case('App\Notifications\OptionRequests')
-                                                @php ($type = 'Demande doption')
-                                                @if($notification->data['lot']['id'] === null)
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a fait une demande doption')
-                                                @else
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a fait une demande doption pour le lot ' . addslashes($notification->data['lot']['id']) )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="''"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\OptionRequestsPending')
-                                                @php ($type = 'Demande doption en attente')
-                                                @if($notification->data['lot']['id'] === null)
-                                                    @php ($msg = 'Votre demande doption est en attente')
-                                                @else
-                                                    @php ($msg = 'Votre demande doption pour le lot ' . addslashes($notification->data['lot']['id'] . ' est en attente') )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="''"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\OptionRequestsValidated')
-                                                @php ($type = 'Demande doption validée')
-                                                @if($notification->data['lot']['id'] === null)
-                                                    @php ($msg = 'Votre demande doption a été validé')
-                                                @else
-                                                    @php ($msg = 'Votre demande doption pour le lot ' . addslashes($notification->data['lot']['id'] . ' a été validée') )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="''"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\OptionRequestsRefused')
-                                                @php ($type = 'Demande doption refusée')
-                                                @if($notification->data['lot']['id'] === null)
-                                                    @php ($msg = 'Votre demande doption a été refusée')
-                                                @else
-                                                    @php ($msg = 'Votre demande doption pour le lot ' . addslashes($notification->data['lot']['id'] . ' a été refusée') )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="''"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\LotBooked')
-                                                @php ($type = 'Lot réservé')
-                                                @if($notification->data['lot']['id'] === null)
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client')
-                                                @else
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a réservé le lot ' . addslashes($notification->data['lot']['id']) )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="''"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\NewDenonce')
-                                                @php ($type = 'Dénonce')
-                                                @if($notification->data['programme']['name'] === null)
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client')
-                                                @else
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' a dénoncé un client pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\ContactNotification')
-                                                @php ($type = 'Contact')
-                                                @if($notification->data['programme']['name'] === null)
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' vous a contacté')
-                                                @else
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' vous a contacté pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                                @case('App\Notifications\NewCall')
-                                                @php ($type = 'Call')
-                                                @if($notification->data['programme']['name'] === null)
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' souhaite être rappelé')
-                                                @else
-                                                    @php ($msg = $notification->data['user']['firstname'] . '.' . substr($notification->data['user']['lastname'], 0, 1) . ' souhaite être rappelé pour le programme ' . addslashes($notification->data['programme']['name']) )
-                                                @endif
-                                                <notifications
-                                                    :id="'{{ $notification->id }}'"
-                                                    :type="'{{ $type }}'"
-                                                    :avatar="'{{ $notification->data['user']['avatar'] }}'"
-                                                    :firstname="'{{ $notification->data['user']['firstname'] }}'"
-                                                    :lastname="'{{ $notification->data['user']['lastname'] }}'"
-                                                    :email="'{{ $notification->data['user']['email'] }}'"
-                                                    :phone="'{{ $notification->data['user']['phone'] }}'"
-                                                    :address="'{{ $notification->data['user']['address'] }}'"
-                                                    :zipcode="'{{ $notification->data['user']['zipcode'] }}'"
-                                                    :city="'{{ $notification->data['user']['city'] }}'"
-                                                    :programme="'{!! addslashes($notification->data['programme']['name']) !!}'"
-                                                    :lot="'{{ $notification->data['lot']['numero'] }}'"
-                                                    :message="'{{ $msg }}'"
-                                                    :inset="'{{ true }}'"
-                                                ></notifications>
-                                                @break
-                                            @endswitch
-
-                                        @endforeach
-                                    </v-list>
-
-                                </div>
-                            </li>
-                        @endif
                         <v-divider class="mt-2 mb-2" vertical></v-divider>
                         <li class="nav-item dropdown text-center pt-2 pb-2">
                             <v-icon  flat>far fa-user</i></v-icon>
@@ -993,8 +624,8 @@
                                 </form>
                             </div>
                         </li>
-
-                        @endguest
+                @endguest
+                        <add-advert-button></add-advert-button>
                     </v-toolbar-items>
             </v-toolbar>
         @endif

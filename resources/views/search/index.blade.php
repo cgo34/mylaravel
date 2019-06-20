@@ -51,49 +51,8 @@
     ></actif-filter-search>
     <v-container fluid grid-list-md class="programmes-list">
         @if($programmes != '[]')
+
             {{--@foreach($programmes as $programme)
-                @php ($count = 0)
-                @php ($lots = array())
-                @php ($favoriteslots = array())
-                @foreach($programme->dispositifs as $dispositif)
-                    @php ($dispositifs = $dispositif->name)
-                @endforeach
-                @php ($minimum = 1000000000)
-                @foreach($programme->lots as $lot)
-                    @php ($count++)
-                    @php ($lots[] = $lot)
-                    @php ($favoriteslots[$lot->id] = ($lot->favorited()) ? 'true' : 'false' )
-                    @if($lot->prix < $minimum)
-                        @php ($minimum = $lot->prix)
-                    @endif
-                @endforeach
-                @if($minimum === 1000000000)
-                    @php($minimum = 'N.C')
-                @endif
-
-                @php ($favorites = ($programme->favorited()) ? 'true' : 'false' )
-
-                <v-card width="100%" hover>
-                    <programme
-                        :id="'{{ $programme->id }}'"
-                        :thumbnail="'{{ addslashes($programme->thumbnail) }}'"
-                        :images="'{{ addslashes($programme->images) }}'"
-                        :name="'{!! addslashes($programme->name) !!}'"
-                        :livraison="'{{ $programme->date_livraison }}'"
-                        :city="'{{ $programme->city }}'"
-                        :zipcode="'{{ $programme->zipcode }}'"
-                        :dispositifs="'{{ $dispositifs }}'"
-                        :count="'{{ $count }}'"
-                        :lots="'{{ json_encode($lots) }}'"
-                        :minimum="'{{ $minimum }}'"
-                        :favorites="'{{ $favorites }}'"
-                        :favoriteslots="'{{ json_encode($favoriteslots) }}'"
-                        :user="'{{ Auth()->user() }}'"
-                    ></programme>
-                </v-card>
-                <v-spacer class="mt-1"></v-spacer>
-            @endforeach--}}
-            @foreach($programmes as $programme)
                 @php ($count = 0)
                 @php ($countFavorites = 0)
                 @php ($countBooked = 0)
@@ -155,7 +114,116 @@
                     ></programme>
                 </v-card>
                 <v-spacer class="mt-1"></v-spacer>
+            @endforeach--}}
+
+            @foreach($programmes as $programme)
+                @php ($count = 0)
+                @php ($countFavorites = 0)
+                @php ($countMyBooked = 0)
+                @php ($countBooked = 0)
+                @php ($lots = array())
+                @php ($favoriteslots = array())
+                @php ($mybookslots = array())
+                @php ($bookslots = array())
+                @foreach($programme->dispositifs as $dispositif)
+                    @php ($dispositifs = $dispositif->name)
+                @endforeach
+                @php ($minimum = 1000000000)
+                @foreach($programme->lots as $lot)
+                    @php ($count++)
+                    @php ($lots[] = $lot)
+                    @php ($favoriteslots[$lot->id] = ($lot->favorited()) ? 'true' : 'false' )
+                    @php ($mybookslots[$lot->id] = ($lot->myBooked()) ? 'true' : 'false' )
+                    @php ($bookslots[$lot->id] = $lot->isBooked())
+                    @if($lot->prix < $minimum)
+                        @php ($minimum = $lot->prix)
+                    @endif
+                @endforeach
+                @foreach($favoriteslots as $key => $favoritelot)
+                    @if($favoritelot === 'true')
+                        @php ($countFavorites++)
+                    @endif
+                @endforeach
+                @foreach($mybookslots as $key => $mybooklot)
+                    @if($mybooklot === 'true')
+                        @php ($countMyBooked++)
+                    @endif
+                @endforeach
+                @foreach($bookslots as $key => $booklot)
+                    @if($booklot === 'true')
+                        @php ($countBooked++)
+                    @endif
+                @endforeach
+                @if($minimum === 1000000000)
+                    @php($minimum = 'N.C')
+                @endif
+
+                @php($countFinal = $count - $countBooked)
+                @php ($favorites = ($programme->favorited()) ? 'true' : 'false' )
+                @php ($books = ($programme->booked()) ? 'true' : 'false' )
+
+                {{-- Define Page --}}
+                @php ($page = 'mysearch' )
+
+                {{ $count }}
+                {{ $countMyBooked }}
+                {{ $countBooked }}
+
+                @if($count === $countBooked && $countMyBooked > 0)
+                    <v-card width="100%" hover>
+                        <programme
+                            :id="'{{ $programme->id }}'"
+                            :thumbnail="'{{ addslashes($programme->thumbnail) }}'"
+                            :images="'{{ addslashes($programme->images) }}'"
+                            :name="'{!! addslashes($programme->name) !!}'"
+                            :livraison="'{{ $programme->date_livraison }}'"
+                            :city="'{{ $programme->city }}'"
+                            :zipcode="'{{ $programme->zipcode }}'"
+                            :dispositifs="'{{ $dispositifs }}'"
+                            :count="'{{ $count }}'"
+                            :countfavorites="'{{ $countFavorites }}'"
+                            :countbooked="'{{ $countBooked }}'"
+                            :countfinal="'{{ $countFinal }}'"
+                            :lots="'{{ json_encode($lots) }}'"
+                            :minimum="'{{ $minimum }}'"
+                            :favorites="'{{ $favorites }}'"
+                            :favoriteslots="'{{ json_encode($favoriteslots) }}'"
+                            :books="'{{ $books }}'"
+                            :bookslots="'{{ json_encode($bookslots) }}'"
+                            :page="'{{ $page }}'"
+                            :user="'{{ Auth()->user() }}'"
+                        ></programme>
+                    </v-card>
+                    <v-spacer class="mt-1"></v-spacer>
+                @elseif($count !== $countBooked)
+                    <v-card width="100%" hover>
+                        <programme
+                            :id="'{{ $programme->id }}'"
+                            :thumbnail="'{{ addslashes($programme->thumbnail) }}'"
+                            :images="'{{ addslashes($programme->images) }}'"
+                            :name="'{!! addslashes($programme->name) !!}'"
+                            :livraison="'{{ $programme->date_livraison }}'"
+                            :city="'{{ $programme->city }}'"
+                            :zipcode="'{{ $programme->zipcode }}'"
+                            :dispositifs="'{{ $dispositifs }}'"
+                            :count="'{{ $count }}'"
+                            :countfavorites="'{{ $countFavorites }}'"
+                            :countbooked="'{{ $countBooked }}'"
+                            :countfinal="'{{ $countFinal }}'"
+                            :lots="'{{ json_encode($lots) }}'"
+                            :minimum="'{{ $minimum }}'"
+                            :favorites="'{{ $favorites }}'"
+                            :favoriteslots="'{{ json_encode($favoriteslots) }}'"
+                            :books="'{{ $books }}'"
+                            :bookslots="'{{ json_encode($bookslots) }}'"
+                            :page="'{{ $page }}'"
+                            :user="'{{ Auth()->user() }}'"
+                        ></programme>
+                    </v-card>
+                    <v-spacer class="mt-1"></v-spacer>
+                @endif
             @endforeach
+
         @else
             @php($user = Auth::user())
                         <contact-form

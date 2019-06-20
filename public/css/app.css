@@ -11692,6 +11692,30 @@ html {
   border-color: #2196F3;
 }
 
+.tertiary-color {
+  color: #D81B60;
+}
+
+.tertiary-plain {
+  background: #D81B60;
+}
+
+.tertiary-border {
+  border-color: #D81B60;
+}
+
+.quaternary-color {
+  color: #FFCA28;
+}
+
+.quaternary-plain {
+  background: #FFCA28;
+}
+
+.quaternary-border {
+  border-color: #FFCA28;
+}
+
 .grey-color {
   color: #5d5d5d;
 }
@@ -11914,5 +11938,25 @@ table.v-table thead th:not(:first-child) {
 .menu-list {
   list-style: none;
   padding-left: 0;
+}
+
+.advert-features .v-list__tile__sub-title,
+.advert-features .v-list__tile__title {
+  white-space: inherit;
+}
+
+.advert-location .theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
+  border: 1px solid #c7c7c7 !important;
+}
+
+.advert-location .theme--light.v-text-field--outline > .v-input__control > .v-input__slot:hover {
+  border: 1px solid #D81B60 !important;
+  -webkit-filter: brightness(1.2) grayscale(0.5) opacity(0.9);
+  -moz-filter: brightness(1.2) grayscale(0.5) opacity(0.9);
+  filter: brightness(1.2) grayscale(0.5) opacity(0.9);
+}
+
+.advert-location .theme--light.v-text-field.v-input--is-focused > .v-input__control > .v-input__slot {
+  border: 1px solid #D81B60 !important;
 }
 

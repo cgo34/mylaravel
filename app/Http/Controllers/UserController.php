@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Dispositif;
+use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Programme;
+use App\PropertiesType;
+use App\Lot;
 use App\OptionRequests;
 
 
@@ -71,51 +75,6 @@ class UserController extends Controller
         return $user;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $slug = $this->getSlug($request);
-
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        // Compatibility with Model binding.
-        $id = $id instanceof Model ? $id->{$id->getKeyName()} : $id;
-
-        $data = call_user_func([$dataType->model_name, 'findOrFail'], $id);
-        dd($data);
-        // Check permission
-        $this->authorize('edit', $data);
-
-        if (!Auth::user()->hasPermission('edit_roles')) {
-            unset($request['role_id']);
-        }
-
-        // Validate fields with ajax
-        $val = $this->validateBread($request->all(), $dataType->editRows);
-
-
-        if ($val->fails()) {
-            return response()->json(['errors' => $val->messages()]);
-        }
-
-        if (!$request->ajax()) {
-            $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
-
-            event(new BreadDataUpdated($dataType, $data));
-
-            return back()
-                ->with([
-                    'message'    => __('voyager.generic.successfully_updated')." {$dataType->display_name_singular}",
-                    'alert-type' => 'success',
-                ]);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -135,44 +94,26 @@ class UserController extends Controller
      */
     public function myFavorites()
     {
-        $user = Auth::user();
-        $myFavorites = Auth::user()->favorites;
-        $myFavoritesLots = Auth::user()->favoritesLots;
+        $properties = Property::with('dispositifs', 'properties', 'services', 'features', 'favorites')
+            //->where('parent', '=', NULL)
+            ->whereHas('favorites', function ($query) {
+                $query->where('user_id','=',Auth::user()->id);
+            })
+            ->orderBy('id', 'DESC')
+            ->get();
+        //dd($properties);
 
-        $favoris = array();
-        $programmes = array();
-        $lots = array();
-        foreach ($myFavoritesLots as $myFavoriteLot){
+        $types = PropertiesType::all();
 
-            foreach ($myFavorites as $myFavorite){
+        return view('users.favorites', compact('properties', 'types'));
 
-                if($myFavoriteLot->programme_id == $myFavorite->id){
-                    if(!in_array($myFavorite, $programmes)){
-                        $programmes[] = $myFavorite;
-                    }
-                    if(!in_array($myFavoriteLot, $lots)){
-                        $lots[] = $myFavoriteLot;
-                    }
-
-                }else{
-                    if(!in_array($myFavorite, $programmes)){
-                        $prog = Programme::find($myFavoriteLot->programme_id);
-                        $programmes[] = $prog;
-                    }
-                    if(!in_array($myFavoriteLot, $lots)){
-                        if($myFavoriteLot->isBooked()){
-                            $lots[] = array($myFavoriteLot, 'booked');
-                        }
-
-                    }
-                }
-                $favoris[] = array($programmes, $lots);
-            }
-
-        }
-
-
-        return view('users.favorites', compact('myFavorites', 'myFavoritesLots', 'favoris'));
+        $programmes = Programme::with('dispositifs', 'lots.optionRequests', 'lots.favorites')
+            ->whereHas('lots.favorites', function ($query) {
+                $query->where('user_id','=',Auth::user()->id);
+            })
+            ->orderBy('id', 'DESC')
+            ->get();
+        return view('users.favorites', compact('programmes'));
     }
 
     /**
@@ -212,11 +153,7 @@ class UserController extends Controller
                 }
                 $books[] = array($programmes, $lots);
             }
-
         }
-
-
-
         return view('users.books', compact('myBooks', 'myBooksLots', 'books'));
     }
 
@@ -227,41 +164,12 @@ class UserController extends Controller
      */
     public function myOptionRequests()
     {
-        $myBooks = Auth::user()->books;
-        $myBooksLots = Auth::user()->booksLots;
-        $myOptionRequests = Auth::user()->optionRequests;
-        //dd($myOptionRequests);
-        $optionRequests = array();
-        $programmes = array();
-        $lots = array();
-        foreach ($myOptionRequests as $myOptionRequest){
-
-            foreach ($myBooks as $myBook){
-
-                if($myOptionRequest->programme_id == $myBook->id){
-                    if(!in_array($myBook, $programmes)){
-                        $programmes[] = $myBook;
-                    }
-                    if(!in_array($myOptionRequest, $lots)){
-                        $lots[] = $myOptionRequest;
-                    }
-
-                }else{
-                    if(!in_array($myOptionRequest, $programmes)){
-                        $prog = Programme::find($myOptionRequest->programme_id);
-                        $programmes[] = $prog;
-                    }
-                    if(!in_array($myOptionRequest, $lots)){
-                        $lots[] = $myOptionRequest;
-                    }
-                }
-                $optionRequests[] = array($programmes, $lots);
-            }
-
-        }
-
-
-
-        return view('users.books', compact('myBooks', 'myOptionRequests', 'optionRequests'));
+        $programmes = Programme::with('dispositifs', 'lots.optionRequests', 'lots.favorites')
+            ->whereHas('lots.optionRequests', function ($query) {
+                $query->where('user_id','=',Auth::user()->id);
+            })
+            ->orderBy('id', 'DESC')
+            ->get();
+        return view('users.books', compact('programmes'));
     }
 }

@@ -50,18 +50,46 @@
             </div>
         </v-layout>
     </v-parallax>
-    <v-container fluid pa-0>
+    <v-container fluid grid-list-md pa-0>
         <v-layout row wrap grid-md-list>
             <v-flex md12 class="text-md-center">
                 <v-card flat color="#00e094" >
                     {{--<v-responsive>
                         <v-parallax src="{{ asset('img/bg-video-concept.jpg') }}" height="auto">--}}
-                    <v-layout row wrap class="pt-5 pb-5">
+                    <v-layout row wrap class="pt-5">
                         <v-flex md12>
                             <h2 class="display-1 text-uppercase font-weight-bold white--text pa-2">Retour de lots</h2>
                             <p class="headline text-uppercase white--text">Ne ratez pas les derniers retours de lot</p>
                         </v-flex>
                     </v-layout>
+                    <v-container>
+                        <v-layout row wrap>
+                            <v-flex md3>
+                                <v-card>
+                                    <v-img src="{{ asset('img/bg-video-concept.jpg') }}" aspect-ratio="1.7"></v-img>
+                                    <h3 class="subheading text-uppercase font-weight-bold black--text pa-2">Retour de lots</h3>
+                                </v-card>
+                            </v-flex>
+                            <v-flex md3>
+                                <v-card>
+                                    <v-img src="{{ asset('img/bg-video-concept.jpg') }}" aspect-ratio="1.7"></v-img>
+                                    <h3 class="subheading text-uppercase font-weight-bold black--text pa-2">Retour de lots</h3>
+                                </v-card>
+                            </v-flex>
+                            <v-flex md3>
+                                <v-card>
+                                    <v-img src="{{ asset('img/bg-video-concept.jpg') }}" aspect-ratio="1.7"></v-img>
+                                    <h3 class="subheading text-uppercase font-weight-bold black--text pa-2">Retour de lots</h3>
+                                </v-card>
+                            </v-flex>
+                            <v-flex md3>
+                                <v-card>
+                                    <v-img src="{{ asset('img/bg-video-concept.jpg') }}" aspect-ratio="1.7"></v-img>
+                                    <h3 class="subheading text-uppercase font-weight-bold black--text pa-2">Retour de lots</h3>
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                     {{--</v-parallax>
                 </v-responsive>--}}
                 </v-card>
@@ -125,6 +153,122 @@
         </v-layout>
         </v-card>
     </v-container>
+    <v-container fluid pt-0 pb-0>
+        <v-layout row wrap grid-md-list>
+            <v-flex md3>
+                <v-card id="seller" flat color="#00e094">
+                    <v-img
+                        height="300"
+                        src="{{ asset('img/vendez-votre-bien.png') }}"
+                    >
+                        <div class="seller-image fill-height">
+                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
+                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
+                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Acheter un bien</h2>
+                                    <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="#00e094" class="white--text">Découvrir</v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                    </v-img>
+                </v-card>
+            </v-flex>
+            <v-flex md3>
+                <v-card id="buyer" flat color="#2196F3">
+                    <v-img
+                        height="300"
+                        src="{{ asset('img/achetez-un-bien-neuf.png') }}"
+                    >
+                        <div class="buyer-image fill-height">
+                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
+                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
+                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Vendre un bien</h2>
+                                    <v-btn round color="#2196F3" class="white--text">Découvrir</v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                    </v-img>
+                </v-card>
+            </v-flex>
+            <v-flex md3>
+                <v-card id="seller" flat color="#D81B60">
+                    <v-img
+                        height="300"
+                        src="{{ asset('img/vendez-votre-bien.png') }}"
+                    >
+                        <div class="seller-image fill-height">
+                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
+                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
+                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Louer un bien</h2>
+                                    <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="#D81B60" class="white--text">Découvrir</v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                    </v-img>
+                </v-card>
+            </v-flex>
+            <v-flex md3>
+                <v-card id="buyer" flat color="#FFCA28">
+                    <v-img
+                        height="300"
+                        src="{{ asset('img/achetez-un-bien-neuf.png') }}"
+                    >
+                        <div class="buyer-image fill-height">
+                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
+                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
+                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Estimer mon bien</h2>
+                                    <v-btn round color="#FFCA28" class="white--text">Découvrir</v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                    </v-img>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
+    <v-container fluid pa-0>
+        <v-card flat>
+            <v-layout row wrap>
+                <v-flex xs12 offset-md1 md6 pt-5 class="text-md-center">
+                    <v-layout row wrap>
+                        <v-flex xs12 md12 class="pb-3">
+                            <h2 class="display-1 text-uppercase font-weight-bold grey--text text--darken-4 pa-2">Optimisez vos recherches de bien</h2>
+                            <p class="headline text-uppercase ">Un outil pensé pour les professionnels</p>
+                        </v-flex>
+                        <v-flex xs12 md12 class="pt-3 pb-5">
+                            <p class="subheading">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        </v-flex>
+                        <v-flex md12 class="pb-5">
+                            <v-btn href="{{ url('/programmes') }}" class="no-underline font-weight-bold btn-box-shadow-primary" round large color="#00e094"><span class="white--text">Trouver votre bien</span></v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+                <v-flex xs12 md5>
+                    <v-img src="{{ asset('img/achetez-un-bien-neuf.png') }}"></v-img>
+                </v-flex>
+            </v-layout>
+        </v-card>
+    </v-container>
+    <v-container fluid pa-0>
+            <v-layout row wrap>
+                <v-flex xs12 md5>
+                    <v-img id="img-seller" src="{{ asset('img/vendez-votre-bien.png') }}"></v-img>
+                </v-flex>
+                <v-flex xs12 md6 pt-5 class="text-md-center">
+                    <v-layout row wrap>
+                        <v-flex xs12 md12 class="pb-3">
+                            <h2 class="display-1 text-uppercase font-weight-bold grey--text text--darken-4 pa-2">Faites vous accompagner</h2>
+                            <p class="headline text-uppercase ">Bénéficiez de l'expertise de nos conseillers</p>
+                        </v-flex>
+                        <v-flex xs12 md12 class="pt-3 pb-5">
+                            <p class="subheading">Pour la plupart d’entre nous, particuliers Investisseurs, faire fructifier notre épargne n’est pas une tâche aisée. La variété des choix de placements et leur complexité accrue rendent plus difficile la prise de décision et nécessitent davantage de connaissances, d’informations et de temps à y consacrer. Le Conseiller en Gestion de Patrimoine vous aide dans cette prise de décision pour votre épargne, non seulement sur un angle purement financier, mais surtout il vous accompagne dans la gestion globale de votre patrimoine, tel un médecin généraliste qui veillera sur vous et votre famille, voire sur votre entreprise le cas échéant, vous préconisant un traitement approprié et individualisé.</p>
+                        </v-flex>
+                        <v-flex md12 class="pb-5">
+                            <v-btn href="{{ url('/contact') }}" class="no-underline font-weight-bold btn-box-shadow-primary" round large color="#00e094"><span class="white--text">Se faire accompagner</span></v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
+    </v-container>
     <v-container fluid pa-0>
         <v-layout row wrap grid-md-list>
             <v-flex md12 class="text-md-center">
@@ -158,19 +302,20 @@
         </v-layout>
     </v-container>
     <v-container fluid pa-0>
-        <v-layout row wrap grid-md-list>
-            <v-flex md12 class="text-md-center">
-                <v-card flat color="#00e094" >
+        <v-card>
+            <v-layout row wrap grid-md-list>
+                <v-flex md12 class="text-md-center">
+
                     {{--<v-responsive>
                         <v-parallax src="{{ asset('img/bg-video-concept.jpg') }}" height="auto">--}}
                     <v-layout row wrap class="pt-5 pb-5">
                         <v-flex md12>
-                            <h2 class="display-1 text-uppercase font-weight-bold white--text pa-2">Parrainer c'est gagner</h2>
-                            <p class="headline text-uppercase white--text">Vous connaissez quelqu'un susceptible d'acheter ?</p>
-                            <p class="headline text-uppercase white--text">Recevez un chèque de <span class="font-weight-bold">500 €</span> pour chaque vente réalisée</p>
+                            <h2 class="display-1 text-uppercase font-weight-bold black--text pa-2">Parrainer c'est gagner</h2>
+                            <p class="headline text-uppercase black--text">Vous connaissez quelqu'un susceptible d'acheter ?</p>
+                            <p class="headline text-uppercase black--text">Recevez un chèque de <span class="font-weight-bold">500 €</span> pour chaque vente réalisée</p>
                         </v-flex>
                         <v-flex offset-md3 md6  class="pt-3 pb-3">
-                            <p class="subheading white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p class="subheading black--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         </v-flex>
                         <v-flex md12>
                             @if(Auth::user())
@@ -183,50 +328,6 @@
                     </v-layout>
                     {{--</v-parallax>
                 </v-responsive>--}}
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
-    <v-container fluid pt-0 pb-0>
-        <v-layout row wrap>
-            <v-flex xs12 offset-md1 md6 pt-5 class="text-md-center">
-                <v-layout row wrap>
-                    <v-flex xs12 md12 class="pb-3">
-                        <h2 class="display-1 text-uppercase font-weight-bold grey--text text--darken-4 pa-2">Optimisez vos recherches de bien</h2>
-                        <p class="headline text-uppercase ">Un outil pensé pour les professionnels</p>
-                    </v-flex>
-                    <v-flex xs12 md12 class="pt-3 pb-5">
-                        <p class="subheading">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </v-flex>
-                    <v-flex md12 class="pb-5">
-                        <v-btn href="{{ url('/programmes') }}" class="no-underline font-weight-bold btn-box-shadow-primary" round large color="#00e094"><span class="white--text">Trouver votre bien</span></v-btn>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-            <v-flex xs12 md5>
-                <v-img src="{{ asset('img/achetez-un-bien-neuf.png') }}"></v-img>
-            </v-flex>
-        </v-layout>
-    </v-container>
-    <v-container fluid pa-0>
-        <v-card flat color="white">
-            <v-layout row wrap>
-                <v-flex xs12 md5>
-                    <v-img id="img-seller" src="{{ asset('img/vendez-votre-bien.png') }}"></v-img>
-                </v-flex>
-                <v-flex xs12 md6 pt-5 class="text-md-center">
-                    <v-layout row wrap>
-                        <v-flex xs12 md12 class="pb-3">
-                            <h2 class="display-1 text-uppercase font-weight-bold grey--text text--darken-4 pa-2">Faites vous accompagner</h2>
-                            <p class="headline text-uppercase ">Bénéficiez de l'expertise de nos conseillers</p>
-                        </v-flex>
-                        <v-flex xs12 md12 class="pt-3 pb-5">
-                            <p class="subheading">Pour la plupart d’entre nous, particuliers Investisseurs, faire fructifier notre épargne n’est pas une tâche aisée. La variété des choix de placements et leur complexité accrue rendent plus difficile la prise de décision et nécessitent davantage de connaissances, d’informations et de temps à y consacrer. Le Conseiller en Gestion de Patrimoine vous aide dans cette prise de décision pour votre épargne, non seulement sur un angle purement financier, mais surtout il vous accompagne dans la gestion globale de votre patrimoine, tel un médecin généraliste qui veillera sur vous et votre famille, voire sur votre entreprise le cas échéant, vous préconisant un traitement approprié et individualisé.</p>
-                        </v-flex>
-                        <v-flex md12 class="pb-5">
-                            <v-btn href="{{ url('/contact') }}" class="no-underline font-weight-bold btn-box-shadow-primary" round large color="#00e094"><span class="white--text">Se faire accompagner</span></v-btn>
-                        </v-flex>
-                    </v-layout>
                 </v-flex>
             </v-layout>
         </v-card>
@@ -449,47 +550,10 @@
             @endforeach
         </v-layout>
     </v-container>--}}
-    {{--<v-container fluid pb-0>
-        <v-layout row wrap grid-md-list>
-            <v-flex md6>
-                <v-card id="seller" flat color="#2196F3">
-                    <v-img
-                        height="420"
-                        src="{{ asset('img/vendez-votre-bien.png') }}"
-                    >
-                        <div class="seller-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Vendez votre bien</h2>
-                                    <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="#00e094" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
-                </v-card>
-            </v-flex>
-            <v-flex md6>
-                <v-card id="buyer" flat color="#00e094">
-                    <v-img
-                        height="420"
-                        src="{{ asset('img/achetez-un-bien-neuf.png') }}"
-                    >
-                        <div class="buyer-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Devenez propriétaire</h2>
-                                    <v-btn round color="#2196F3" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
 
 
-    <v-container fluid pt-0 pb-0>
+
+    {{--<v-container fluid pt-0 pb-0>
         <v-layout row wrap grid-md-list>
             <v-flex md12>
                 <v-card id="seller" flat color="#2196F3">

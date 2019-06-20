@@ -19,5 +19,10 @@ class Dispositif extends Model
         return $this->belongsToMany(Programme::class, $pivotTable, 'dispositif_id','programme_id');
     }
 
+    public function properties(){
+        $pivotTable = 'property_dispositif';
+        return $this->belongsToMany(Property::class, $pivotTable, 'dispositif_id','property_id');
+    }
+
 
 }

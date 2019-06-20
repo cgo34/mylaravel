@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="parrainageModal" max-width="600px">
-        <v-btn class="no-underline font-weight-semibold btn-box-shadow-white" round large slot="activator" color="#fff"><span class="primary-color">Parrainez un proche</span></v-btn>
+        <v-btn class="no-underline font-weight-semibold btn-box-shadow-white" round large slot="activator" color="#00e094" dark><span>Parrainez un proche</span></v-btn>
         <v-card>
             <v-card-title class="pt-4" style="display:block; text-align: center;">
                 <h2 class="primary-color text-uppercase font-weight-bold">Parrainer</h2>

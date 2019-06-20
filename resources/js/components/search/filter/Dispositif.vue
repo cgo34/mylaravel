@@ -26,8 +26,6 @@
       },
       mounted () {
           var _this = this;
-          console.log('dipo selected');
-          console.log(this.selectedispo);
           this.disposelected = this.selectedispo;
           axios.get('/dispositifs' ).then((response) => {
               response.data.forEach(function(element) {

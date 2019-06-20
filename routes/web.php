@@ -18,13 +18,28 @@ Route::get('/programmes', 'ProgrammeController@listProg')->middleware('verified'
 Route::get('/programmes/{idProgramme}/lots/{idLot}', 'ProgrammeController@showLot')->middleware('verified');
 
 /*
- *  Favorties Routes
+ *  Properties Routes
+ */
+Route::get('/properties', 'PropertyController@index')->middleware('verified');
+Route::get('/annonces/location', 'PropertyController@getAllLocation');
+Route::get('/annonces/location/{idLocation}', 'PropertyController@show');
+
+Route::get('/annonces/add', 'AdvertController@addAdvert');
+Route::get('/annonces/add/location', 'AdvertController@addAdvertLocation');
+Route::post('/annonces/add/location', 'AdvertController@storeAdvertLocation');
+Route::get('/annonces/add/location/success', 'AdvertController@addLocationSuccess')->name('addLocationSuccess');
+
+/*
+ *  Favorites Routes
  */
 Route::post('favorite/programme/{programme}', 'ProgrammeController@favoriteProgramme');
 Route::post('unfavorite/programme/{programme}', 'ProgrammeController@unFavoriteProgramme');
 Route::post('favorite/lot/{lot}', 'LotController@favoriteLot');
 Route::post('unfavorite/lot/{lot}', 'LotController@unFavoriteLot');
 Route::get('/favorites', 'UserController@myFavorites')->middleware('auth');
+
+Route::post('favorite/property/{property}', 'PropertyController@favoriteProperty');
+Route::post('unfavorite/property/{property}', 'PropertyController@unFavoriteProperty');
 
 /*
  *  Books Routes
@@ -40,7 +55,7 @@ Route::get('/books', 'UserController@myOptionRequests')->middleware('auth');
 /*
  *  Option Requests Routes
  */
-Route::post('/option/request/{lot}', 'LotController@makeOptionRequest');
+Route::post('/option/request/{lot}/{accompaniment}', 'LotController@makeOptionRequest');
 Route::post('/option/unrequest/{lot}', 'LotController@unMakeOptionRequest');
 
 /*

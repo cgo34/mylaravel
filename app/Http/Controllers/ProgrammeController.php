@@ -29,11 +29,10 @@ class ProgrammeController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
      */
     public function listProg(Request $request)
     {
-        //
-        $programmes = Programme::with('dispositifs', 'lots.optionRequests')->orderBy('id', 'DESC')->get();
-        $myOptionRequests = Auth::user()->optionRequests;
-        $dispositifs = Dispositif::all();
-        return view('programmes.index', compact('programmes', 'dispositifs', 'myOptionRequests'));
+        $programmes = Programme::with('dispositifs', 'lots.optionRequests', 'lots.favorites')
+            ->orderBy('id', 'DESC')
+            ->get();
+        return view('programmes.index', compact('programmes'));
     }
 
 

@@ -7,6 +7,9 @@
 <body>
 <h2>Nouvel demande d'option</h2>
 <ul>
+    <li><strong>Être accompagné ?</strong> : {{ $optionRequests['accompaniment'] }}</li>
+</ul>
+<ul>
     <li><strong>Lot</strong> : {{ $optionRequests['lot']['numero'] }} (#{{ $optionRequests['lot']['id'] }})</li>
 </ul>
 <ul>

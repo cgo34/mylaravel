@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use App\Programme;
 use App\Lot;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
@@ -61,11 +62,30 @@ class SearchController extends Controller
             $dispositifSearch = null;
         }
 
+        $programmes = Programme::with(['dispositifs', 'lots', 'lots.favorites', 'lots.optionrequests'])
+            ->where('city', 'like', $request->city)
+            ->when($request->price, function ($query, $price) {
+                $priceConstraint = function ($q) use ($price) {
+                    return $q->where('prix', '<=', $price);
+                };
+                return $query->whereHas('lots', $priceConstraint)
+                    ->with(['lots' => $priceConstraint]);
+            })
+            ->when($request->dispositif, function ($query, $dispositif) {
+                $dispositifConstraint = function ($q) use ($dispositif) {
+                    return $q->where('id', "=", $dispositif);
+                };
+                return $query->whereHas('dispositifs', $dispositifConstraint)
+                    ->with(['dispositifs' => $dispositifConstraint]);
+            })
+            ->orderBy('id', 'DESC')
+            ->get();
+
 
         //dd($dispositifSearch);
 
         return view('search.index', [
-            'programmes' => $programmes->get(),
+            'programmes' => $programmes,
             'dispo' => $dispositifSearch,
         ]);
     }

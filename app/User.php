@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use TCG\Voyager\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -52,6 +53,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'settings',
         'role_id',
         'locale',
+        'api_token',
     ];
 
     /**
@@ -62,6 +64,11 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function adverts()
+    {
+        return $this->belongsTo(Advert::class);
+    }
 
     public function file()
     {
@@ -204,6 +211,12 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         return $this;
     }
 
+    public function generateToken()
+    {
+        $this->api_token = str_random(60);
+        $this->save();
 
+        return $this->api_token;
+    }
 
 }

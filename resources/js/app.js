@@ -95,6 +95,11 @@ Vue.component('LocationList', require('./components/adverts/locations/LocationLi
 Vue.component('LocationListItem', require('./components/adverts/locations/LocationListItem.vue'));
 Vue.component('single-location', require('./components/adverts/SingleLocation.vue'));
 
+
+Vue.component('BuyerList', require('./components/adverts/buyers/BuyerList.vue'));
+Vue.component('BuyerListItem', require('./components/adverts/buyers/BuyerListItem.vue'));
+Vue.component('single-location', require('./components/adverts/SingleLocation.vue'));
+
 //Vue.component('myfooter', require('./components/Footer.vue'));
 Vue.component('call', require('./components/Call.vue'));
 
@@ -102,7 +107,7 @@ Vue.component('call', require('./components/Call.vue'));
  *
  * Forms Components
  */
-Vue.component('add-location-form', require('./components/form/location/AddLocationForm.vue'));
+Vue.component('add-advert-form', require('./components/form/advert/AddAdvertForm.vue'));
 Vue.component('file-upload', require('./components/form/file/FileUpload.vue'));
 
 /**

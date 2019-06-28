@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PropertiesType;
 use App\Property;
 use App\Advert;
 use Illuminate\Http\Request;
@@ -26,6 +27,15 @@ class PropertyController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContro
         return view('properties.index', compact('properties'));
     }
 
+    public function getPropertyTypes(Request $request)
+    {
+        $property_types = PropertiesType::with('features')
+            ->whereIn('name', ['Appartement', 'Maison', 'Terrain', 'Parking'])
+            ->orderBy('name', 'ASC')
+            ->get();
+        return response()->json($property_types);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,13 +50,12 @@ class PropertyController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContro
             })
             ->get();*/
 
-        $locations = Property::with( 'favorites', 'user', 'files', 'features')
-            ->where('advert_type_id', '=', 'Location')
-            ->orderBy('id', 'DESC')
-            ->get();
+       // $locations = Property::with( 'favorites', 'user', 'files', 'features')
+         //   ->orderBy('id', 'DESC')
+         //   ->get();
 
         //dd($locations);
-        return view('adverts.location', compact('locations'));
+        return view('adverts.location');
     }
 
     public function getLocations(Request $request)

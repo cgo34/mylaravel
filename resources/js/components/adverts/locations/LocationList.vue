@@ -3,7 +3,6 @@
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex md12 v-bind:key="index" v-for="(location, index) in locations">
-                    {{ location.files }}
                     <location-list-item
                         :location="location"
                     ></location-list-item>
@@ -29,11 +28,11 @@ export default {
         };
     },
     mounted() {
-        this.$store.dispatch('locations/loadLocations');
+        this.$store.dispatch('adverts/loadLocations');
     },
     computed: {
         locations() {
-            return this.$store.state.locations.locations;
+            return this.$store.state.adverts.locations;
         },
     },
 };

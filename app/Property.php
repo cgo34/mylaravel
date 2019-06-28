@@ -50,7 +50,6 @@ class Property extends Model
 
         'energetic_class_id',
         'property_type_id',
-        'advert_type_id',
         'parent',
 
         'user_id',
@@ -74,8 +73,9 @@ class Property extends Model
         return $this->belongsTo(Region::class);
     }
 
-    public function advertstype(){
-        return $this->belongsTo(AdvertsType::class);
+    public function advert()
+    {
+        return $this->belongsTo(Advert::class, 'property_id', 'id');
     }
 
     public function propertiestype(){

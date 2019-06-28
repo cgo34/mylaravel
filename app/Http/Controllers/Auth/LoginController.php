@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -34,7 +37,9 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        Log::info('test login');
         $this->redirectTo = url()->previous();
         $this->middleware('guest')->except('logout');
+        return $this->redirectTo;
     }
 }

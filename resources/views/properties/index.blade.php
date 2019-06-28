@@ -2,11 +2,6 @@
 @section('content')
     <v-container fluid grid-list-md>
         @forelse($properties as $property)
-            {{ $property }}
-            {{ $property->name }}
-            {{ $property->delivery }}
-            {{ $property->city }}
-            {{ $property->thumbnail }}
 
             {{-- Define Variables --}}
             @php ($count = 0)
@@ -66,23 +61,20 @@
             @endif
 
             @if($count === $countBooked && $countMyBooked > 0)
-                <v-card width="100%" hover class="mb-3">
+
                     <properties
                         :property="{{ $property }}"
                         :minimum="'{{ $minimum }}'"
                         :countfinal="'{{ $countFinal }}'"
                         :user="{{ Auth()->user() }}"
                     ></properties>
-                </v-card>
             @elseif($count !== $countBooked)
-                <v-card width="100%" hover class="mb-3">
                     <properties
                         :property="{{ $property }}"
                         :minimum="'{{ $minimum }}'"
                         :countfinal="'{{ $countFinal }}'"
                         :user="{{ Auth()->user() }}"
                     ></properties>
-                </v-card>
             @endif
         @empty
             <p>Aucun programmes disponibles</p>

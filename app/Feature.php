@@ -15,6 +15,10 @@ class Feature extends Model
 
     public $timestamps = false;
 
+    public function adverts(){
+        return $this->belongsToMany(Advert::class, 'advert_feature', 'feature_id', 'feature_id');
+    }
+
     public function properties(){
         return $this->belongsToMany(Property::class, 'property_feature', 'feature_id', 'feature_id');
     }

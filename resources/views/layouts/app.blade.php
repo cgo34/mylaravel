@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="token" id="token" content="{{ auth()->check() ? auth()->user()->api_token : null }}">
+    <meta name="token" id="token" content="{{ auth()->check() ? auth()->user()->remember_token : csrf_token() }}">
 
     <title>{{ config('app.name', 'Galileo') }}</title>
 
@@ -56,7 +56,7 @@
                 {{--{{ menu('PrimaryMenu') }}--}}
 
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Acheter') }}</a>
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Vendre') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/achat') }}">{{ __('Vendre') }}</a>
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/location') }}">{{ __('Louer') }}</a>
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Estimer') }}</a>
 
@@ -349,7 +349,7 @@
                 {{--{{ menu('PrimaryMenu') }}--}}
 
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Acheter') }}</a>
-                <a class="nav-link grey--text font-weight-bold" href="{{ url('/properties') }}">{{ __('Vendre') }}</a>
+                <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/achat') }}">{{ __('Vendre') }}</a>
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/annonces/location') }}">{{ __('Louer') }}</a>
                 <a class="nav-link grey--text font-weight-bold" href="{{ url('/notre-concept') }}">{{ __('Estimer') }}</a>
 

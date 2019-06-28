@@ -1,14 +1,11 @@
 <template>
     <v-layout row wrap>
-        <v-flex md12>
-            {{ location.files }}
-        </v-flex>
         <v-flex md9>
             <v-card>
                 <v-layout row wrap>
                     <v-flex md5 pa-0 pt-0 pb-0>
                         <v-img
-                            v-for="(image, index) in location.files"
+                            v-for="(image, index) in location.property.files"
                             v-bind:key="index"
                             v-if="image.category_key === 'THUMBNAIL'"
                             :src="getImages(image.path)"
@@ -24,38 +21,47 @@
                         <v-card-title>
                             <v-layout row wrap>
                                 <v-flex md8>
-                                    <a :href="'/annonces/location/' + location.id" title=""><h3 class="title">{{ location.property_type_id }}</h3></a>
-                                    <v-chip small>{{ location.living_space }}m²</v-chip>
-                                    <v-chip small>{{ location.typology }}</v-chip>
-                                    <v-chip small>R+{{ location.floor }}</v-chip><br>
-                                    <span class="subheading secondary--text">{{ location.city }}</span>
+                                    <a :href="'/annonces/location/' + location.id" title=""><h3 class="title">{{ location.property.property_type_id }}</h3></a>
+                                    <v-chip small>{{ location.property.living_space }}m²</v-chip>
+                                    <v-chip small>{{ location.property.typology }}</v-chip>
+                                    <v-chip small>R+{{ location.property.floor }}</v-chip><br>
+                                    <span class="subheading secondary--text">{{ location.property.zipcode }}</span>
                                 </v-flex>
                                 <v-flex md4 class="text-md-right">
-                                    <span class="font-weight-bold title">{{ location.rent_price }} €</span>
+                                    <span class="font-weight-bold title">{{ location.property.rent_price }}€/mois</span>
                                     <img src="https://v.seloger.com/s/width/150/logos/1/s/z/l/1szl5iaqv57vz2bp8oobbohm9jn0kx0fda5wkl8fo.jpg" alt="FLATLOOKER" height="30px">
                                 </v-flex>
                             </v-layout>
                         </v-card-title>
-                        <v-card-text class="pt-0 pb-0">
+                        <v-card-text  class="pt-0">
                             <v-layout row wrap>
-                                <v-flex md8>
-                                    <p>{{ location.description }}</p>
-                                </v-flex>
-                                <v-flex md4>
-
+                                <v-flex md12>
+                                    <p>{{ location.property.description }}</p>
                                 </v-flex>
                             </v-layout>
 
                         </v-card-text>
-                        <v-card-actions class="pt_0 pb_0">
+                        <!--<v-card-actions class="">
                             <v-spacer></v-spacer>
-                            <v-btn dark small outline icon color="#5d5d5d" @click.stop="becallModal = !becallModal">
+                            <v-btn
+                                dark
+                                color="orange"
+                                round
+                                small
+                            >
                                 <v-icon small>call</v-icon>
+                                <span class="text-none">Afficher le numéro</span>
                             </v-btn>
-                            <v-btn dark small outline icon color="#5d5d5d" @click.stop="contactModal = !contactModal">
+                            <v-btn
+                                dark
+                                color="blue"
+                                round
+                                small
+                            >
                                 <v-icon small>email</v-icon>
+                                <span class="text-none">Envoyez un message</span>
                             </v-btn>
-                        </v-card-actions>
+                        </v-card-actions>-->
                     </v-flex>
                 </v-layout>
 

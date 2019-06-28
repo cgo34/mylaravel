@@ -50,12 +50,12 @@
             </div>
         </v-layout>
     </v-parallax>
-    <v-container fluid grid-list-md pa-0>
+    {{--<v-container fluid grid-list-md pa-0>
         <v-layout row wrap grid-md-list>
             <v-flex md12 class="text-md-center">
                 <v-card flat color="#00e094" >
-                    {{--<v-responsive>
-                        <v-parallax src="{{ asset('img/bg-video-concept.jpg') }}" height="auto">--}}
+                    --}}{{--<v-responsive>
+                        <v-parallax src="{{ asset('img/bg-video-concept.jpg') }}" height="auto">--}}{{--
                     <v-layout row wrap class="pt-5">
                         <v-flex md12>
                             <h2 class="display-1 text-uppercase font-weight-bold white--text pa-2">Retour de lots</h2>
@@ -90,20 +90,20 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
-                    {{--</v-parallax>
-                </v-responsive>--}}
+                    --}}{{--</v-parallax>
+                </v-responsive>--}}{{--
                 </v-card>
             </v-flex>
         </v-layout>
-    </v-container>
-    <v-container fluid pa-0>
+    </v-container>--}}
+    <v-container grid-list-md fluid pa-0 style="padding-bottom: 100px;">
         <v-card flat color="white">
-            <v-layout row wrap>
+            <v-layout align-end row wrap>
             <v-flex xs12 md6>
-                <v-img src="{{ asset('img/galileo-bg-home.png') }}"></v-img>
+                <v-img src="https://www.lunchr.co/hs-fs/hubfs/FAQ@2x@2x-1.png?width=804&name=FAQ@2x@2x-1.png"></v-img>
             </v-flex>
 
-            <v-flex xs12 md5 pt-5 class="text-md-center">
+            <v-flex xs12 md5 pt-5 pb-5 class="text-md-center">
                 <v-layout row wrap>
                     <v-flex xs12 md12 class="pb-5">
                         <h2 class="display-1 text-uppercase font-weight-bold grey--text text--darken-4 pa-2">Pourquoi nous choisir</h2>
@@ -145,82 +145,66 @@
                         >fas fa-handshake</v-icon>
                         <h3 class="subheading text-uppercase">Des garanties fiables</h3>
                     </v-flex>
-                    <v-flex xs12 md12 class="pt-3 pb-5">
+                    {{--<v-flex xs12 md12 class="pt-3 pb-5">
                         <v-btn href="{{ url('/contact') }}" class="no-underline font-weight-bold btn-box-shadow-primary" round large color="#00e094"><span class="white--text">Découvrir Galileo</span></v-btn>
-                    </v-flex>
+                    </v-flex>--}}
                 </v-layout>
             </v-flex>
         </v-layout>
         </v-card>
     </v-container>
-    <v-container fluid pt-0 pb-0>
-        <v-layout row wrap grid-md-list>
+    <v-container grid-list-md pt-0 pb-5>
+        <v-layout row wrap justify-center grid-md-list >
             <v-flex md3>
-                <v-card id="seller" flat color="#00e094">
-                    <v-img
-                        height="300"
-                        src="{{ asset('img/vendez-votre-bien.png') }}"
-                    >
-                        <div class="seller-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Acheter un bien</h2>
-                                    <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="#00e094" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
+                <v-card class="elevation-5" id="seller" color="#00e094" style=" margin-top: -50px; border-radius: 16px">
+                    <v-card-title>
+                        <h2 class="title  font-weight-bold white--text pa-2">Acheter un bien</h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <p class="white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </v-card-text>
+                    <v-card-actions class="justify-center">
+                        <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="white" class="#00e094--text">Découvrir</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-flex>
             <v-flex md3>
-                <v-card id="buyer" flat color="#2196F3">
-                    <v-img
-                        height="300"
-                        src="{{ asset('img/achetez-un-bien-neuf.png') }}"
-                    >
-                        <div class="buyer-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Vendre un bien</h2>
-                                    <v-btn round color="#2196F3" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
+                <v-card class="elevation-20" id="seller" color="#D81B60" style=" margin-top: -50px; border-radius: 16px">
+                    <v-card-title>
+                        <h2 class="title  font-weight-bold white--text pa-2">Louer un bien</h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <p class="white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </v-card-text>
+                    <v-card-actions class="justify-center">
+                        <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="white" class="#D81B60--text">Découvrir</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-flex>
             <v-flex md3>
-                <v-card id="seller" flat color="#D81B60">
-                    <v-img
-                        height="300"
-                        src="{{ asset('img/vendez-votre-bien.png') }}"
-                    >
-                        <div class="seller-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Louer un bien</h2>
-                                    <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="#D81B60" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
+                <v-card class="elevation-10" id="buyer" color="#2196F3" style=" margin-top: -50px; border-radius: 16px">
+                    <v-card-title>
+                        <h2 class="title font-weight-bold white--text pa-2">Rechercher un bien</h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <p class="white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </v-card-text>
+                    <v-card-actions class="justify-center">
+                        <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="white" class="#2196F3--text">Découvrir</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-flex>
             <v-flex md3>
-                <v-card id="buyer" flat color="#FFCA28">
-                    <v-img
-                        height="300"
-                        src="{{ asset('img/achetez-un-bien-neuf.png') }}"
-                    >
-                        <div class="buyer-image fill-height">
-                            <v-layout pa-2 fill-height align-center class="lightbox white--text">
-                                <v-flex md8 class="pt-3 pb-3 img-block-home text-md-center">
-                                    <h2 class="headline text-uppercase font-weight-bold white--text pa-2">Estimer mon bien</h2>
-                                    <v-btn round color="#FFCA28" class="white--text">Découvrir</v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </div>
-                    </v-img>
+                <v-card class="elevation-15" id="buyer" color="#FFCA28" style=" margin-top: -50px; border-radius: 16px">
+                    <v-card-title>
+                        <h2 class="title font-weight-bold white--text pa-2">Estimer un bien</h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <p class="white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </v-card-text>
+                    <v-card-actions class="justify-center">
+                        <v-btn href="https://www.ladresse-montpellier-saintroch.com/catalog/estimation.php" target="_blank" round color="white" class="#FFCA28--text">Découvrir</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-flex>
         </v-layout>

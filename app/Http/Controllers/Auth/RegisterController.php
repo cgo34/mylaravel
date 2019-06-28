@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class RegisterController extends Controller
@@ -100,6 +101,7 @@ class RegisterController extends Controller
             'company' => $data['company'],
             'holder' => $data['holder'],
             'card' => $data['card'],
+            'api_token' => Str::random(60),
         ]);
     }
 

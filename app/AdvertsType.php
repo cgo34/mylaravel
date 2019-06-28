@@ -9,10 +9,13 @@ class AdvertsType extends Model
 {
     protected $table = 'adverts_type';
 
+    protected $fillable = [ 'id', 'name'];
+
     public $timestamps = false;
 
-
-    public function properties(){
-        return $this->hasMany(Property::class);
+    public function adverts()
+    {
+        return $this->belongsTo(Advert::class);
     }
+
 }

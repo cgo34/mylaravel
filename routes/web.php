@@ -21,13 +21,29 @@ Route::get('/programmes/{idProgramme}/lots/{idLot}', 'ProgrammeController@showLo
  *  Properties Routes
  */
 Route::get('/properties', 'PropertyController@index')->middleware('verified');
-Route::get('/annonces/location', 'PropertyController@getAllLocation');
-Route::get('/annonces/location/{idLocation}', 'PropertyController@show');
+
+Route::get('/annonces/location', 'AdvertController@getAllLocations');
+Route::get('/annonces/achat', 'AdvertController@getAllBuyers');
+Route::get('/annonces/vente', 'AdvertController@getAllLocations');
+Route::get('/annonces/location/{idLocation}', 'AdvertController@showLocation');
 
 Route::get('/annonces/add', 'AdvertController@addAdvert');
+
+Route::post('/adverts', 'AdvertController@storeAdvert');
+
+Route::get('/annonces/add/vente', 'AdvertController@addAdvertSeller');
+Route::post('/annonces/add/vente', 'AdvertController@storeAdvertSeller');
+Route::get('/annonces/add/vente/success', 'AdvertController@addAdvertSellerSuccess')->name('addAdvertSellerSuccess');
+
 Route::get('/annonces/add/location', 'AdvertController@addAdvertLocation');
-Route::post('/annonces/add/location', 'AdvertController@storeAdvertLocation');
-Route::get('/annonces/add/location/success', 'AdvertController@addLocationSuccess')->name('addLocationSuccess');
+Route::post('/annonces/add/location', 'AdvertController@storeAdvert');
+Route::get('/annonces/add/location/success', 'AdvertController@addLocationSuccess')->name('addAdvertLocationSuccess');
+
+
+Route::get('/annonces/add/achat', 'AdvertController@addAdvertBuyer');
+Route::post('/annonces/add/achat', 'AdvertController@storeAdvertBuyer');
+Route::get('/annonces/add/vente/success', 'AdvertController@addAdvertBuyerSuccess')->name('addAdvertBuyerSuccess');
+
 
 /*
  *  Favorites Routes
@@ -83,6 +99,8 @@ Route::post('/action/denonce', 'DenonceController@store');
 Route::post('/action/call', 'CallController@store');
 Route::post('/action/parrainage', 'ParrainageController@store');
 Route::post('/action/subscriber', 'NewsletterController@newSubscriber');
+
+
 
 
 Route::middleware ('auth', 'verified')->group (function () {

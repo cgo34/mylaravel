@@ -1,6 +1,6 @@
 <template>
-    <v-flex xs12 sm12 md12>
-        {{ property }}
+    <v-flex xs12 sm12 md9>
+        <v-card width="100%" hover class="mb-3">
         <v-layout align-center row wrap class="property-card" @click.stop="showLots = !showLots">
             <v-flex xs12 sm12 md2 pa-0 pt-0 pb-0>
                 <v-img :src="getImages(property.thumbnail)" aspect-ratio="1.7"></v-img>
@@ -101,6 +101,7 @@
                 ></property-lots>
             </v-flex>
         </v-layout>
+        </v-card>
     </v-flex>
 </template>
 

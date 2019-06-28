@@ -20,13 +20,15 @@ import Vuex from 'vuex';
 */
 Vue.use( Vuex );
 
-import locations  from './modules/locations.store.js'
+import user  from './modules/user.store.js'
+import adverts  from './modules/adverts.store.js'
 
 /*
   Exports our data store.
 */
 export default new Vuex.Store({
     modules: {
-        locations,
+        user,
+        adverts,
     },
 });

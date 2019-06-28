@@ -26,6 +26,7 @@
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
+        {{ location }}
         <v-container>
             <v-layout row wrap>
                 <v-flex md9>
@@ -38,14 +39,14 @@
                                         hide-delimiters
                                     >
                                         <v-carousel-item
-                                            v-for="(image, index) in location.files"
+                                            v-for="(image, index) in location.property.files"
                                             v-bind:key="index"
                                             v-if="image.category_key === 'IMAGES'"
                                             :src="getImages(image.path)"
                                         ></v-carousel-item>
                                     </v-carousel>
                                     <favorites-properties
-                                        :property="location.id"
+                                        :property="location.property.id"
                                         :favorited="favoriteProperty(location.favorites)"
                                     ></favorites-properties>
                                 </v-flex>
@@ -58,21 +59,21 @@
                             <v-card-title>
                                 <v-layout row wrap>
                                     <v-flex md8>
-                                        <a :href="'/annonces/location/' + location.id" title=""><h3 class="title">{{ location.property_type_id }}</h3></a>
-                                        <v-chip small>{{ location.living_space }}m²</v-chip>
-                                        <v-chip small>{{ location.typology }}</v-chip>
-                                        <v-chip small>R+{{ location.floor }}</v-chip><br>
-                                        <span class="subheading secondary--text">{{ location.city }}</span>
+                                        <a :href="'/annonces/location/' + location.property.id" title=""><h3 class="title">{{ location.property.property_type_id }}</h3></a>
+                                        <v-chip small>{{ location.property.living_space }}m²</v-chip>
+                                        <v-chip small>{{ location.property.typology }}</v-chip>
+                                        <v-chip small>R+{{ location.property.floor }}</v-chip><br>
+                                        <span class="subheading secondary--text">{{ location.property.city }}</span>
                                     </v-flex>
                                     <v-flex md4 class="text-md-right">
-                                        <span class="font-weight-bold title">{{ location.rent_price }} €</span>
+                                        <span class="font-weight-bold title">{{ location.property.rent_price }} €</span>
                                     </v-flex>
                                 </v-layout>
                             </v-card-title>
                             <v-card-text class="pt-0 pb-0">
                                 <v-layout row wrap>
                                     <v-flex md8>
-                                        <p>{{ location.description }}</p>
+                                        <p>{{ location.property.description }}</p>
                                     </v-flex>
                                     <v-flex md4>
 
@@ -101,7 +102,7 @@
                         <v-card light color="white" class="pa-3" hover>
                             <v-card-text class="px-0 body-2">
                                 <v-chip
-                                    v-for="(feature, index) in location.features"
+                                    v-for="(feature, index) in location.property.features"
                                     v-bind:key="index"
                                     color="#D81B60" text-color="white">{{ feature.name }}</v-chip>
                             </v-card-text>
@@ -114,7 +115,7 @@
                     <v-spacer class="mb-1"></v-spacer>
                     <div xs12 sm12 md12 class="mb-3">
                         <v-card light color="white" class="pa-3" hover>
-                            <v-card-text class="px-0 body-2"><p>{{ location.description }}</p></v-card-text>
+                            <v-card-text class="px-0 body-2"><p>{{ location.property.description }}</p></v-card-text>
                         </v-card>
                     </div>
                     <v-spacer class="mb-5"></v-spacer>
@@ -123,6 +124,9 @@
                     <v-card>
                         <v-layout align-center row wrap>
                             <v-flex xs12 sm12 text-md-center>
+                                <v-avatar color="indigo">
+                                    <v-icon dark>account_circle</v-icon>
+                                </v-avatar> {{ location.user.username }}
                                 <img src="https://v.seloger.com/s/width/150/logos/1/s/z/l/1szl5iaqv57vz2bp8oobbohm9jn0kx0fda5wkl8fo.jpg" alt="FLATLOOKER" height="30px">
                             </v-flex>
                             <v-flex xs12 sm12 text-md-center>

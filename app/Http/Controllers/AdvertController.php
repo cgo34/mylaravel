@@ -18,7 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AdvertController extends Controller
+class AdvertController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
     public function getAdvertTypes(Request $request)
     {
@@ -261,7 +261,6 @@ class AdvertController extends Controller
             /* CREATE ADVERT */
             $advert = Advert::create([
                 'user_id' => $user->id,
-                'property_id' => NULL,
                 'advert_type_id' => $advert_type->id,
                 'description' => $request->input('description'),
                 'living_space_min' => $request->input('living_space_min'),

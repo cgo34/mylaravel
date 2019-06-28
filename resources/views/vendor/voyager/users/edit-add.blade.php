@@ -124,28 +124,57 @@
                                        value="@if(isset($dataTypeContent->company)){{ $dataTypeContent->company }}@endif">
                             </div>
 
-                            <div class="form-group">
-                                @php
-                                    if (isset($dataTypeContent->holder)) {
-                                        $selected_holder = $dataTypeContent->holder;
-                                    } else {
-                                        $selected_holder = '';
-                                    }
+{{--                            <div class="form-group">--}}
+{{--                                @php--}}
+{{--                                    if (isset($dataTypeContent->role_id)) {--}}
+{{--                                        $selected_role = $dataTypeContent->role_id;--}}
+{{--                                    } else {--}}
+{{--                                        $selected_role = '';--}}
+{{--                                    }--}}
 
-                                    $holders = array('oui', 'non');
+{{--                                    $civilites = Role::All();--}}
 
-                                @endphp
+{{--                                @endphp--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="genre">{{ __('Civilité') }}</label>--}}
+{{--                                    <select class="form-control select2" id="genre" name="genre">--}}
+{{--                                        @foreach ($civilites as $civ)--}}
+{{--                                            <option value="{{ $civ }}"--}}
+{{--                                                {{ ($civ == $selected_civilite ? 'selected' : '') }}>{{ $civ }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+
+                            @can('editRoles', $dataTypeContent)
+                                <div class="form-group">
+                                    <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
+                                    @php
+                                        $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
+
+                                        $row     = $dataTypeRows->where('field', 'role_id')->first();
+
+                                        if(!empty($row)){
+                                            $options = $row->details;
+                                        }
+
+                                    @endphp
+                                    @include('voyager::formfields.relationship')
+                                </div>
+                                <div class="form-group">
+                                    <label for="additional_roles">{{ __('voyager::profile.roles_additional') }}</label>
+                                    @php
+                                        $row     = $dataTypeRows->where('field', 'role_id')->first();
+                                        $options = $row->details;
+                                        if(!empty($row)){
+                                            $options = $row->details;
+                                        }
+                                    @endphp
+                                    @include('voyager::formfields.relationship')
+                                </div>
+                            @endcan
 
 
-
-                                <label for="holder">{{ __('Titulaire') }}</label>
-                                <select class="form-control select2" id="holder" name="holder">
-                                    @foreach ($holders as $holder)
-                                        <option value="{{ $holder }}"
-                                            {{ ($holder == $selected_holder ? 'selected' : '') }}>{{ $holder }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
                             <div id="cardfield" class="form-group">
                                 <label for="card">{{ __('Card') }}</label>
@@ -153,35 +182,6 @@
                                        value="@if(isset($dataTypeContent->card)){{ $dataTypeContent->card }}@endif">
                             </div>
 
-                                <div class="form-group">
-                                    <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
-                                    @php
-                                        $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
-
-                                        $row     = $dataTypeRows->where('field', 'user_belongsto_role_relationship')->first();
-                                        $options = $row->details;
-
-                                        $model = app($options->model);
-                                        $query = $model::where($options->key, $dataTypeContent->{$options->column})->get();
-                                    @endphp
-                                    <select
-                                        class="form-control select2-ajax" name="{{ $options->column }}"
-                                        data-get-items-route="{{route('voyager.' . $dataType->slug.'.relation')}}"
-                                    >
-                                        @php
-
-                                            $model = app($options->model);
-                                            $query = $model::where($options->key, $dataTypeContent->{$options->column})->get();
-                                        @endphp
-
-                                        @if(!$row->required)
-                                            <option value="">{{__('voyager::generic.none')}}</option>
-                                        @endif
-                                        @foreach($query as $relationshipData)
-                                            <option value="{{ $relationshipData->{$options->key} }}" @if($dataTypeContent->{$options->column} == $relationshipData->{$options->key}){{ 'selected="selected"' }}@endif>{{ $relationshipData->{$options->label} }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                             @php
                                 if (isset($dataTypeContent->locale)) {
                                     $selected_locale = $dataTypeContent->locale;
@@ -199,6 +199,9 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                        </div>
+
                         </div>
                     </div>
                 </div>
@@ -233,24 +236,24 @@
 
 @section('javascript')
     <script>
-        $('document').ready(function () {
-            $('.toggleswitch').bootstrapToggle();
+    $('document').ready(function () {
+        $('.toggleswitch').bootstrapToggle();
 
-            var selectedHolder = $('#holder').val();
+        var selectedHolder = $('#holder').val();
+        if(selectedHolder === 'non'){
+            $('#cardfield').hide();
+        }else if(selectedHolder === 'oui'){
+            $('#cardfield').show();
+        }
+
+        $('#holder').on('change', function () {
+            var selectedHolder = $(this).val();
             if(selectedHolder === 'non'){
                 $('#cardfield').hide();
             }else if(selectedHolder === 'oui'){
                 $('#cardfield').show();
             }
-
-            $('#holder').on('change', function () {
-                var selectedHolder = $(this).val();
-                if(selectedHolder === 'non'){
-                    $('#cardfield').hide();
-                }else if(selectedHolder === 'oui'){
-                    $('#cardfield').show();
-                }
-            });
         });
+    });
     </script>
 @stop

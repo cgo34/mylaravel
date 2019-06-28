@@ -13,26 +13,9 @@ use App\Lot;
 use App\OptionRequests;
 
 
-class UserController extends Controller
+class UserController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-        User::All();
-        if(Auth::user()){
-            $user = User::find(Auth::user()->id);
-            return response()->json($user);
-        }else{
-            $user = false;
-            return response()->json($user);
-        }
 
-    }
 
 
     /**
@@ -63,29 +46,8 @@ class UserController extends Controller
         return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-        return $user;
-    }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     /**
      * Get all favorite posts by user

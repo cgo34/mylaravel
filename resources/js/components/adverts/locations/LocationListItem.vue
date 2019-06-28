@@ -8,7 +8,7 @@
                             v-for="(image, index) in location.property.files"
                             v-bind:key="index"
                             v-if="image.category_key === 'THUMBNAIL'"
-                            :src="getImages(image.path)"
+                            :src="'../storage/img/' + image.path"
                             aspect-ratio="1.7">
                         </v-img>
                     </v-flex>

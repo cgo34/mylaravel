@@ -64,6 +64,20 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
     ];
+    protected static $relationships = [];
+
+    public static function getRelationship($id)
+    {
+
+        if (!isset(self::$relationships[$id])) {
+
+            self::$relationships[$id] = self::find($id);
+
+        }
+
+        return self::$relationships[$id];
+
+    }
 
     public function adverts()
     {
@@ -74,7 +88,6 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     {
         return $this->hasMany("App\File");
     }
-
 
     public function roleId(){
         return $this->belongsTo(Role::class);

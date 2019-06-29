@@ -86,7 +86,7 @@ Route::get('/lots/additional/{id}/{city}/{price}', 'LotController@getAdditionalL
  */
 
 Route::get('/roles', 'RoleController@index');
-Route::get('/user', 'UserController@index');
+Route::get('/user', 'UserController@getUser');
 
 Route::post('/search', 'SearchController@filter')->name('search')->middleware('verified');
 Route::get('/dispositifs', 'DispositifController@index');

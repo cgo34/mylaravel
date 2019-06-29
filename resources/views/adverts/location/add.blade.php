@@ -5,7 +5,7 @@
         <v-layout align-center justify-center row wrap>
             <v-flex md12>
                 @guest
-                    <add-advert-form :user="false" user_type="particular" type="location" :propertiestype="{{ $propertiesType }}"></add-advert-form>
+                    <add-advert-form :user="false" user_type="particular" type="Location" :propertiestype="{{ $propertiesType }}"></add-advert-form>
                 @else
                     <add-advert-form :user="{{ Auth()->user() }}" type="Location" :propertiestype="{{ $propertiesType }}"></add-advert-form>
                 @endguest

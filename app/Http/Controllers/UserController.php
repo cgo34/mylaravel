@@ -16,7 +16,15 @@ use App\OptionRequests;
 class UserController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
 
-
+    public function getUser(){
+        if(Auth::user()){
+            $user = User::find(Auth::user()->id);
+            return response()->json($user);
+        }else{
+            $user = false;
+            return response()->json($user);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.

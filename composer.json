@@ -12,7 +12,7 @@
         "appstract/laravel-blade-directives": "^1.4",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
-        "laravel/framework": "5.7.*",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "pusher/pusher-php-server": "^3.4",
         "tcg/voyager": "1.2.*"
